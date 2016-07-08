@@ -21,7 +21,7 @@ router.post('/authenticate', function (req, res) {
 			}
 			else {
 				var token = jwt.sign({name: user.name}, req.app.get('secret key'), {
-					expiresIn: '1d'
+					expiresIn: '30s'
 				});
 
 				res.json({

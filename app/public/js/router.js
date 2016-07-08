@@ -1,22 +1,47 @@
 define(['backbone', 'jquery'], function (BB, $) {
-	return BB.Router.extend({
+	var Router = BB.Router.extend({
 		routes: {
-			'login': 'login',
-			'start': 'start'
-		},
-		initialize: function () {
-			BB.history.start();
-			var isAuthenticated = true;
-			isAuthenticated ? this.navigate('start', {trigger: true}) : this.navigate('login', {trigger: true});
+			'login': 'showLoginPage',
+			'start': 'showStartPage'
 		},
 		execute: function (callback, args, name) {
-			callback();
-		},
-		login: function () {
-			console.log('login handler');
-		},
-		start: function () {
-			console.log('start handler');
+			console.log('execute');
+			if(callback) callback();
 		}
 	});
+
+	return {
+		initialize: function () {
+			var router = new Router(), loadedPages = [];
+
+			router.on('route:showLoginPage', function () {
+				console.log('show login page');
+				if($.inArray('login', loadedPages) != -1) {
+					console.log('login page ya estaba cargada');
+				}
+				else {
+					requirejs(['views/pages/login'], function (LoginPageView) {
+						new LoginPageView().render();
+						loadedPages.push('login');
+					});
+				}
+			});
+
+			router.on('route:showStartPage', function () {
+				console.log('show start page');
+				if($.inArray('start', loadedPages) != -1) {
+					console.log('start page ya estaba cargada');
+				}
+				else {
+					requirejs(['views/pages/start'], function (StartPageView) {
+						new StartPageView().render();
+						loadedPages.push('start');
+					});
+				}
+			});
+
+			BB.history.start();
+			false ? router.navigate('start', {trigger: true}) : router.navigate('login', {trigger: true});
+		}
+	};
 });

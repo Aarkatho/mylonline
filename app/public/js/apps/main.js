@@ -1,8 +1,8 @@
-define(['router'], function (Router) {
+define(['router'], function (router) {
 	return {
 		initialize: function () {
 			console.log('inicializando apps/main.js');
-			new Router();
+			router.initialize();
 		}
 	};
 });
