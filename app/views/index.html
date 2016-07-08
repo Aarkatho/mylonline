@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<meta name="author" content="">
+		<title>MyL Online</title>
+		<link rel="stylesheet" type="text/css" href="css/reset.css">
+		<script src="js/libs/require/require.js"></script>
+		<script>
+			requirejs.config({
+				baseUrl: 'js',
+				urlArgs: 'bust=' + (new Date()).getTime(),
+				paths: {
+					backbone: 'libs/backbone/backbone-min',
+					hgn: 'libs/require/plugins/hgn',
+					hogan: 'libs/hogan/hogan',
+					jquery: 'libs/jquery/jquery-3.0.0.min',
+					underscore: 'libs/underscore/underscore-min'
+				}
+			});
+
+			requirejs(['jquery'], function ($) {
+				$.noConflict();
+				$(document).ready(function () {
+					requirejs(['apps/main'], function (mainApp) {
+						mainApp.initialize();
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		This is a test
+	</body>
+</html>
