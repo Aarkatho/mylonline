@@ -2,46 +2,52 @@ define(['backbone', 'jquery'], function (BB, $) {
 	var Router = BB.Router.extend({
 		routes: {
 			'login': 'showLoginPage',
-			'start': 'showStartPage'
+			'dashboard': 'showDashboardPage'
 		},
 		execute: function (callback, args, name) {
-			console.log('execute');
 			if(callback) callback();
 		}
 	});
 
 	return {
 		initialize: function () {
-			var router = new Router(), loadedPages = [];
+			var router = new Router(), pages = {
+				login: {
+					loaded: false
+				},
+				dashboard: {
+					loaded: false,
+					sections: {
+						start: {
+							loaded: false
+						}
+					}
+				},
+				loadPage: function (page) {
+					if(this[page].loaded) {
+						//
+					}
+					else {
+						var self = this;
+						requirejs(['views/pages/' + page], function (PageView) {
+							new PageView().render();
+							self[page].loaded = true;
+						});
+					}
+				}
+			};
 
 			router.on('route:showLoginPage', function () {
-				console.log('show login page');
-				if($.inArray('login', loadedPages) != -1) {
-					console.log('login page ya estaba cargada');
-				}
-				else {
-					requirejs(['views/pages/login'], function (LoginPageView) {
-						new LoginPageView().render();
-						loadedPages.push('login');
-					});
-				}
+				pages.loadPage('login');
 			});
 
-			router.on('route:showStartPage', function () {
-				console.log('show start page');
-				if($.inArray('start', loadedPages) != -1) {
-					console.log('start page ya estaba cargada');
-				}
-				else {
-					requirejs(['views/pages/start'], function (StartPageView) {
-						new StartPageView().render();
-						loadedPages.push('start');
-					});
-				}
+			router.on('route:showDashboardPage', function () {
+				pages.loadPage('dashboard');
 			});
 
 			BB.history.start();
-			false ? router.navigate('start', {trigger: true}) : router.navigate('login', {trigger: true});
+			var isAuthenticated = false;
+			isAuthenticated ? router.navigate('dashboard', {trigger: true}) : router.navigate('login', {trigger: true});
 		}
 	};
 });
