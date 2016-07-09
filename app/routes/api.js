@@ -48,4 +48,26 @@ router.get('/users', tokenRequired, function (req, res) {
 	});
 });
 
+router.get('/user/:name', function (req, res) {
+	User.findOne({
+		name: req.params.name
+	}, function (err, user) {
+		if(err) throw err;
+
+		if(user) {
+			res.json({
+				success: true,
+				message: 'User found.',
+				user: user
+			});
+		}
+		else {
+			res.status(404).send({
+				success: false,
+				message: 'User not found.'
+			});
+		}
+	})
+});
+
 module.exports = router;

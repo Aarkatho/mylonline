@@ -4,12 +4,13 @@ define(['backbone', 'jquery', 'hgn!templates/login'], function (BB, $, loginTemp
 		initialize: function () {
 			console.log('inicializando views/pages/login.js');
 		},
-		render: function () {
+		render: function (callback) {
 			console.log('rendering');
 			var markup = loginTemplate({
 				name: 'Aarkatho'
 			});
 			this.$el.append(markup);
+			callback();
 		}
 	});
 });

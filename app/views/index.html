@@ -25,9 +25,7 @@
 			requirejs(['jquery'], function ($) {
 				$.noConflict();
 				$(document).ready(function () {
-					requirejs(['apps/main'], function (mainApp) {
-						mainApp.initialize();
-					});
+					requirejs(['apps/main']);
 				});
 			});
 		</script>
