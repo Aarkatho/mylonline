@@ -5,31 +5,43 @@ define(['backbone', 'jquery'], function (BB, $) {
 			'dashboard': 'showDashboardPage'
 		},
 		initialize: function () {
-			var loadedPages = {};
+			var pages = {
+				login: {
+					viewUrl: 'views/pages/login/login',
+					isLoaded: false
+				},
+				dashboard: {
+					viewUrl: 'views/pages/dashboard/dashboard',
+					isLoaded: false
+				},
+				showPage: function (page) {
+					if (page.isLoaded) {
+						page.viewInstance.render(function () {
+							// quitar ajax loader de pagina (modal)
+						});
+					} else {
+						this.loadPage(page);
+					}
+				},
+				loadPage: function (page) {
+					requirejs([page.viewUrl], function (PageView) {
+						var viewInstance = new PageView();
 
-			function loadPage (pageName) {
-				if (loadedPages.hasOwnProperty(pageName)) {
-					loadedPages[pageName].render(function () {
-						// quitar ajax loader de actualizar pagina (tipo modal)
-					});
-				} else {
-					requirejs(['views/pages/' + pageName + '/' + pageName], function (PageView) {
-						var pageView = new PageView();
-
-						pageView.render(function () {
-							loadedPages[pageName] = pageView;
-							// quitar ajax loader de pagina
+						viewInstance.render(function () {
+							page.isLoaded = true;
+							page.viewInstance = viewInstance;
+							// quitar ajax loader de pagina (body)
 						});
 					});
 				}
-			}
+			};
 
 			this.on('route:showLoginPage', function () {
-				loadPage('login');
+				pages.showPage(pages.login);
 			});
 
 			this.on('route:showDashboardPage', function () {
-				loadPage('dashboard');
+				pages.showPage(pages.dashboard);
 			});
 
 			BB.history.start();
