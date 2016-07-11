@@ -9,65 +9,72 @@ define(['backbone', 'jquery'], function (BB, $) {
 			var pages = {
 				login: {
 					view: {
-						url: 'views/pages/login',
-						isLoaded: false
+						url: 'pages/login'
 					}
 				},
 				dashboard: {
 					view: {
-						url: 'views/pages/dashboard',
-						isLoaded: false
+						url: 'pages/dashboard'
 					},
 					sections: {
 						start: {
 							view: {
-								url: 'views/pages/sections/dashboard-start',
-								isLoaded: false
+								url: 'pages/sections/dashboard-start'
 							}
 						},
 						shop: {
 							view: {
-								url: 'views/pages/sections/dashboard-start',
-								isLoaded: false
+								url: 'pages/sections/dashboard-shop'
 							}
 						}
 					}
-				},
-				show: function (target, callback) {
-					if (target.view.isLoaded) {
-						target.view.instance.render(function () {});
-					} else {
-						this.loadView(target, function () {
-							if (callback) callback();
-						});
-					}
-				},
-				loadView: function (target, callback) {
-					requirejs([target.view.url], function (targetView) {
-						var instance = new targetView();
-
-						instance.render(function () {
-							target.view.isLoaded = true;
-							target.view.instance = instance;
-							callback();
-						});
-					});
 				}
 			};
 
+			function showPageOrSection (target, callback) {
+				if (target.view.isLoaded) {
+					console.log('ya estaba loaded');
+					renderView(target, function () {
+						if (callback) callback();
+					});
+				} else {
+					console.log('no estaba loaded - ' + target.view.url);
+					loadView(target, function () {
+						if (callback) callback();
+					});
+				}
+			}
+
+			function loadView (target, callback) {
+				requirejs(['views/' + target.view.url], function (TargetView) {
+					var instance = new TargetView();
+
+					instance.render(function () {
+						console.log('renderizando - ' + target.view.url);
+						target.view.isLoaded = true;
+						target.view.instance = instance;
+						callback();
+					});
+				});
+			}
+
+			function renderView (target, callback) {
+				target.view.instance.render(function () {});
+			}
+
 			this.on('route:showLoginPage', function () {
-				pages.show(pages.login);
+				showPageOrSection(pages.login);
 			});
 
 			this.on('route:showDashboardPage', function () {
 				var self = this;
-				pages.show(pages.dashboard, function () {
+				showPageOrSection(pages.dashboard, function () {
 					self.navigate('dashboard/start', {trigger: true});
 				});
 			});
 
 			this.on('route:showDashboardSection', function (section) {
-				pages.show(pages.dashboard.sections[section]);
+				showPageOrSection(pages.dashboard.sections[section]);
 			});
 
 			BB.history.start();
