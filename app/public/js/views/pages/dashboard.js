@@ -1,4 +1,4 @@
-define(['backbone', 'jquery', 'models/user', 'hgn!templates/dashboard'], function (BB, $, UserModel, dashboardTemplate) {
+define(['backbone', 'jquery', 'models/user', 'hgn!templates/pages/dashboard'], function (BB, $, UserModel, dashboardTemplate) {
 	return BB.View.extend({
 		el: '#page-container',
 		initialize: function () {
