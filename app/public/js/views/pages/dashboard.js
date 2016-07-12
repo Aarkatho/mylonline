@@ -21,6 +21,9 @@ define(['backbone', 'jquery', 'models/user', 'hgn!templates/pages/dashboard'], f
 					//
 				}
 			});
+		},
+		show: function () {
+			this.$el.show();
 		}
 	});
 });

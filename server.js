@@ -35,7 +35,7 @@ mongoose.connect(config['database'], function (err) {
 });
 
 // start server
-var port = process.env.PORT || 3333;
+var port = process.env.PORT || 2812;
 
 app.listen(port, function () {
 	console.log('Listening on port ' + port + '.');

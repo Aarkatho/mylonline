@@ -1,0 +1,14 @@
+#dashboard {
+	background-color: red;
+	padding: 10px;
+}
+
+#dashboard-start {
+	background-color: green;
+	padding: 10px;
+}
+
+#dashboard-shop {
+	background-color: yellow;
+	padding: 10px;
+}
