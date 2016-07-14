@@ -7,6 +7,12 @@
     cursor: default;
 }
 
+body {
+    min-height: 720px;
+    min-width: 1280px;
+    background-image: url('/img/grid.png');
+}
+
 #loader {
     background-color: black;
     height: 100%;
@@ -27,6 +33,14 @@
     text-align: center;
 }
 
+/* temp */
+
+#temp-container {
+    height: 720px;
+    position: relative;
+    width: 1280px;
+}
+
 /* ---------- pages ---------- */
 
 /* global */
@@ -37,7 +51,7 @@
     background-repeat: no-repeat;
     background-size: contain;
     height: 100%;
-    position: fixed;
+    position: absolute;
     width: 100%;
 }
 
