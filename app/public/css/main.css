@@ -15,6 +15,18 @@
     z-index: 1000;
 }
 
+#loader p {
+    bottom: 26px;
+    display: none;
+    position: absolute;
+    right: 26px;
+    /* font */
+    color: rgb(216, 216, 216);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 16px;
+    text-align: center;
+}
+
 /* ---------- pages ---------- */
 
 /* global */
