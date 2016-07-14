@@ -1,3 +1,3 @@
 define(['router'], function (Router) {
-	new Router();
+    new Router();
 });

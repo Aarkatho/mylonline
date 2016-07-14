@@ -31,12 +31,12 @@ app.use('/api', apiRoutes);
 
 // connect database
 mongoose.connect(config['database'], function (err) {
-	if(err) throw err;
+    if(err) throw err;
 });
 
 // start server
 var port = process.env.PORT || 2812;
 
 app.listen(port, function () {
-	console.log('Listening on port ' + port + '.');
+    console.log('Listening on port ' + port + '.');
 });
