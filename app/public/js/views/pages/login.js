@@ -1,6 +1,6 @@
 define(['backbone', 'jquery', 'hgn!templates/pages/login'], function (BB, $, loginTemplate) {
     return BB.View.extend({
-        el: '#page-container',
+        el: '#pages',
         initialize: function () {
             //
         },

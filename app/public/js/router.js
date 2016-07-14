@@ -53,6 +53,7 @@ define(['backbone', 'jquery'], function (BB, $) {
                         console.log('renderizando - ' + target.view.url);
                         target.view.isLoaded = true;
                         target.view.instance = instance;
+                        $('#loader').fadeOut(1000);
                         callback();
                     });
                 });

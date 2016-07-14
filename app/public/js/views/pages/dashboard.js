@@ -1,6 +1,6 @@
 define(['backbone', 'jquery', 'models/user', 'hgn!templates/pages/dashboard'], function (BB, $, UserModel, dashboardTemplate) {
     return BB.View.extend({
-        el: '#page-container',
+        el: '#pages',
         initialize: function () {
             this.user = new UserModel();
         },
