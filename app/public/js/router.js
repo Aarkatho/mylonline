@@ -77,6 +77,7 @@ define(['backbone', 'jquery'], function (BB, $) {
 				showPageOrSection(pages.dashboard.sections[section]);
 			});
 
+			history.replaceState({}, '', '/');
 			BB.history.start();
 			this.navigate('dashboard', {trigger: true});
 		},
