@@ -6,7 +6,7 @@ define(['backbone', 'jquery', 'hgn!templates/pages/login'], function (BB, $, log
         },
         render: function (callback) {
             var markup = loginTemplate({});
-            this.$el.html(markup);
+            this.$el.append(markup);
             callback();
         }
     });

@@ -25,25 +25,6 @@
 
             requirejs(['jquery'], function ($) {
                 $.noConflict();
-                // temp >
-                var test = true;
-                function loader () {
-                    if (test) {
-                        test = false;
-                        $('#loader p').animate({opacity: 1}, 750, function () {
-                            loader();
-                        });
-                    } else {
-                        test = true;
-                        $('#loader p').animate({opacity: 0.25}, 750, function () {
-                            loader();
-                        });
-                    }
-                }
-                $('#loader p').fadeIn(500, function () {
-                    loader();
-                });
-                // temp <
                 $(document).ready(function () {
                     requirejs(['apps/main']);
                 });
@@ -51,11 +32,8 @@
         </script>
     </head>
     <body>
-        <div id="temp-container">
-            <div id="loader">
-                <p>CARGANDO</p>
-            </div>
-            <div id="pages"></div>
+        <div id="pages">
+            <div class="page-background"></div>
         </div>
     </body>
 </html>

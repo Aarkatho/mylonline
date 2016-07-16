@@ -14,7 +14,7 @@ define(['backbone', 'jquery', 'models/user', 'hgn!templates/pages/dashboard'], f
                             password: response.user.password
                         }
                     });
-                    self.$el.html(markup);
+                    self.$el.append(markup);
                     callback();
                 },
                 error: function (model, response, options) {
