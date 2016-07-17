@@ -9,12 +9,4 @@ router.get('/', function (req, res) {
     res.render('index', {});
 });
 
-// web socket test >
-
-router.get('/wstest', function (req, res) {
-    res.render('wstest', {});
-});
-
-// <
-
 module.exports = router;

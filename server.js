@@ -1,8 +1,6 @@
 // packages
 
 var express = require('express');
-var http = require('http'); // temp
-var io = require('socket.io'); // temp
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -13,8 +11,6 @@ var basicRoutes = require('./app/routes/basic');
 var apiRoutes = require('./app/routes/api');
 
 var app = express();
-var server = http.createServer(app);
-var io = require('socket.io').listen(server);
 
 app.set('secret key', config['secret key']);
 
@@ -38,19 +34,9 @@ mongoose.connect(config['database'], function (err) {
     if(err) throw err;
 });
 
-// wstest >
-
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
-  });
-});
-
-// <
-
 // start server
 var port = process.env.PORT || 2812;
 
-server.listen(port, function () {
+app.listen(port, function () {
     console.log('Listening on port ' + port + '.');
 });
