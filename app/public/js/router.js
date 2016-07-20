@@ -1,15 +1,29 @@
 define(['backbone', 'jquery'], function (BB, $) {
     return BB.Router.extend({
         routes: {
-            'login': 'showLoginPage',
+            'auth': 'showAuthPage',
+            'auth/:section': 'showAuthSection',
             'dashboard': 'showDashboardPage',
-            'dashboard/:section': 'showDashboardSection'
+            'dashboard/:section': 'showDashboardSection',
+            'banned': 'showBannedPage'
         },
         initialize: function () {
             var pages = {
-                login: {
+                auth: {
                     view: {
-                        url: 'pages/login'
+                        url: 'pages/auth'
+                    },
+                    sections: {
+                        login: {
+                            view: {
+                                url: 'pages/sections/auth-login'
+                            }
+                        },
+                        register: {
+                            view: {
+                                url: 'pages/sections/auth-register'
+                            }
+                        }
                     }
                 },
                 dashboard: {
@@ -27,6 +41,11 @@ define(['backbone', 'jquery'], function (BB, $) {
                                 url: 'pages/sections/dashboard-shop'
                             }
                         }
+                    }
+                },
+                banned: {
+                    view: {
+                        url: 'pages/banned'
                     }
                 }
             };
@@ -62,8 +81,15 @@ define(['backbone', 'jquery'], function (BB, $) {
                 target.view.instance.render(function () {});
             }
 
-            this.on('route:showLoginPage', function () {
-                showPageOrSection(pages.login);
+            this.on('route:showAuthPage', function () {
+                var self = this;
+                showPageOrSection(pages.auth, function () {
+                    self.navigate('auth/login', {trigger: true});
+                });
+            });
+
+            this.on('route:showAuthSection', function (section) {
+                showPageOrSection(pages.auth.sections[section]);
             });
 
             this.on('route:showDashboardPage', function () {
@@ -77,9 +103,13 @@ define(['backbone', 'jquery'], function (BB, $) {
                 showPageOrSection(pages.dashboard.sections[section]);
             });
 
+            this.on('route:showBannedPage', function () {
+                showPageOrSection(pages.banned);
+            });
+
             history.replaceState({}, '', '/');
             BB.history.start();
-            this.navigate('dashboard', {trigger: true});
+            this.navigate('auth', {trigger: true});
         },
         execute: function (callback, args, name) {
             if (callback) callback();

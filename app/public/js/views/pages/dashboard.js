@@ -1,6 +1,6 @@
 define(['backbone', 'jquery', 'models/user', 'hgn!templates/pages/dashboard'], function (BB, $, UserModel, dashboardTemplate) {
     return BB.View.extend({
-        el: '#pages',
+        el: '#dashboard',
         initialize: function () {
             this.user = new UserModel();
         },
@@ -14,7 +14,7 @@ define(['backbone', 'jquery', 'models/user', 'hgn!templates/pages/dashboard'], f
                             password: response.user.password
                         }
                     });
-                    self.$el.append(markup);
+                    self.$el.html(markup);
                     callback();
                 },
                 error: function (model, response, options) {
