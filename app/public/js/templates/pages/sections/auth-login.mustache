@@ -1,5 +1,17 @@
 <div style="padding: 10px; background-color: orangered;">
     <p>auth-login template</p>
     <br>
+    <div style="padding: 10px; background-color: white;">
+        <form id="login-form" action="/api/user/auth/token" method="post">
+            <input type="text" name="email" placeholder="Email">
+            <br>
+            <br>
+            <input type="password" name="password" placeholder="Password">
+            <br>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <br>
     <a href="#auth/register">go to auth-register template</a>
 </div>

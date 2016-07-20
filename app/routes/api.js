@@ -6,7 +6,7 @@ var User = require('../models/user');
 
 var router = express.Router();
 
-router.post('/user', function (req, res) { // create user
+router.post('/user', function (req, res) {
     User.findOne({email: req.body.email}, function (err, user) {
         if (err) throw err;
 
@@ -28,6 +28,10 @@ router.post('/user', function (req, res) { // create user
             });
         }
     });
+});
+
+router.put('/user', function (req, res) {
+    //
 });
 
 router.post('/user/auth/token', function (req, res) {
