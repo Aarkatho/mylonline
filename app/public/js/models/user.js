@@ -1,5 +1,5 @@
 define(['backbone'], function (BB) {
     return BB.Model.extend({
-        url: 'api/user/mars' // test
+        url: 'api/user'
     });
 });

@@ -5,7 +5,7 @@ define(['backbone', 'jquery'], function (BB, $) {
             'submit': 'register'
         },
         initialize: function () {
-            //
+            console.log('inicializando views/register.js');
         }
     });
 });

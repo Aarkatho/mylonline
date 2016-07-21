@@ -13,3 +13,20 @@ body {
     position: relative;
     width: 1280px;
 }
+
+#page-loader {
+    background-color: rgba(0, 0, 0, 0.75);
+    color: blue;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+#section-loader {
+    background-color: rgba(0, 0, 0, 0.75);
+    color: lightblue;
+    display: none;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}

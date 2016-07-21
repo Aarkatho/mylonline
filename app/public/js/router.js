@@ -8,6 +8,8 @@ define(['backbone', 'jquery'], function (BB, $) {
             'banned': 'showBannedPage'
         },
         initialize: function () {
+            console.log('ROUTER CARGADO: router.js');
+
             var pages = {
                 auth: {
                     view: {
@@ -52,12 +54,12 @@ define(['backbone', 'jquery'], function (BB, $) {
 
             function showPageOrSection (target, callback) {
                 if (target.view.isLoaded) {
-                    console.log('ya estaba loaded');
+                    console.log('ROUTER: la pagina ya estaba cargada (' + target.view.url + ')');
                     renderView(target, function () {
                         if (callback) callback();
                     });
                 } else {
-                    console.log('no estaba loaded - ' + target.view.url);
+                    console.log('ROUTER: la pagina "' + target.view.url + '" ha sido cargada');
                     loadView(target, function () {
                         if (callback) callback();
                     });
@@ -69,7 +71,7 @@ define(['backbone', 'jquery'], function (BB, $) {
                     var instance = new TargetView();
 
                     instance.render(function () {
-                        console.log('renderizando - ' + target.view.url);
+                        console.log('ROUTER: renderizando la siguiente pagina: ' + target.view.url);
                         target.view.isLoaded = true;
                         target.view.instance = instance;
                         callback();
