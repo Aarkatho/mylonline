@@ -5,7 +5,7 @@ define(['backbone', 'jquery', 'hgn!templates/pages/sections/dashboard-start'], f
         },
         render: function (callback) {
             var markup = dashboardStartTemplate({});
-            this.setElement('#dashboard-section');
+            this.setElement('#start');
             this.$el.html(markup);
             callback();
         }

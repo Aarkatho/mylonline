@@ -14,19 +14,14 @@ body {
     width: 1280px;
 }
 
-#page-loader {
-    background-color: rgba(0, 0, 0, 0.75);
-    color: blue;
-    height: 100%;
-    position: absolute;
-    width: 100%;
+#auth {
+    background-color: green;
+    display: none;
+    padding: 10px;
 }
 
-#section-loader {
-    background-color: rgba(0, 0, 0, 0.75);
-    color: lightblue;
+#dashboard {
+    background-color: yellow;
     display: none;
-    height: 100%;
-    position: absolute;
-    width: 100%;
+    padding: 10px;
 }

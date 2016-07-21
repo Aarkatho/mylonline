@@ -71,7 +71,7 @@ define(['backbone', 'jquery'], function (BB, $) {
                     var instance = new TargetView();
 
                     instance.render(function () {
-                        console.log('ROUTER: renderizando la siguiente pagina: ' + target.view.url);
+                        console.log('ROUTER: se ha renderizado la siguiente pagina: ' + target.view.url);
                         target.view.isLoaded = true;
                         target.view.instance = instance;
                         callback();
@@ -80,7 +80,9 @@ define(['backbone', 'jquery'], function (BB, $) {
             }
 
             function renderView (target, callback) {
-                target.view.instance.render(function () {});
+                target.view.instance.render(function () {
+                    console.log('ROUTER: se ha renderizado la siguiente pagina: ' + target.view.url);
+                });
             }
 
             this.on('route:showAuthPage', function () {

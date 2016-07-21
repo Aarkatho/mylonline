@@ -5,7 +5,7 @@ define(['backbone', 'jquery', 'hgn!templates/pages/sections/auth-login'], functi
         },
         render: function (callback) {
             var markup = authLoginTemplate({});
-            this.setElement('#auth-sections');
+            this.setElement('#login');
             this.$el.html(markup);
             callback();
         }

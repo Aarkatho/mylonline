@@ -5,7 +5,7 @@ define(['backbone', 'jquery', 'hgn!templates/pages/sections/auth-register'], fun
         },
         render: function (callback) {
             var markup = authRegisterTemplate({});
-            this.setElement('#auth-sections');
+            this.setElement('#register');
             this.$el.html(markup);
             callback();
         }
