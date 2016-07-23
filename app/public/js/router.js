@@ -52,15 +52,25 @@ define(['backbone', 'jquery'], function (BB, $) {
                 }
             };
 
-            function showPageOrSection (target, callback) {
-                if (target.view.isLoaded) {
-                    console.log('ROUTER: la pagina ya estaba cargada (' + target.view.url + ')');
-                    renderView(target, function () {
+            function showPage(page, callback) {
+                if (page.view.isLoaded) {
+                    renderView(page, function () {
                         if (callback) callback();
                     });
                 } else {
-                    console.log('ROUTER: la pagina "' + target.view.url + '" ha sido cargada');
-                    loadView(target, function () {
+                    loadView(page, function () {
+                        if (callback) callback();
+                    });
+                }
+            }
+
+            function showSection(section, callback) {
+                if (section.view.isLoaded) {
+                    renderView(section, function () {
+                        if (callback) callback();
+                    });
+                } else {
+                    loadView(section, function () {
                         if (callback) callback();
                     });
                 }
@@ -71,7 +81,7 @@ define(['backbone', 'jquery'], function (BB, $) {
                     var instance = new TargetView();
 
                     instance.render(function () {
-                        console.log('ROUTER: se ha renderizado la siguiente pagina: ' + target.view.url);
+                        console.log('ROUTER: la vista "' + target.view.url + '" ha sido cargada y renderizada');
                         target.view.isLoaded = true;
                         target.view.instance = instance;
                         callback();
@@ -81,34 +91,34 @@ define(['backbone', 'jquery'], function (BB, $) {
 
             function renderView (target, callback) {
                 target.view.instance.render(function () {
-                    console.log('ROUTER: se ha renderizado la siguiente pagina: ' + target.view.url);
+                    console.log('ROUTER: la vista "' + target.view.url + '" ha sido renderizada nuevamente');
                 });
             }
 
             this.on('route:showAuthPage', function () {
                 var self = this;
-                showPageOrSection(pages.auth, function () {
+                showPage(pages.auth, function () {
                     self.navigate('auth/login', {trigger: true});
                 });
             });
 
             this.on('route:showAuthSection', function (section) {
-                showPageOrSection(pages.auth.sections[section]);
+                showSection(pages.auth.sections[section]);
             });
 
             this.on('route:showDashboardPage', function () {
                 var self = this;
-                showPageOrSection(pages.dashboard, function () {
+                showPage(pages.dashboard, function () {
                     self.navigate('dashboard/start', {trigger: true});
                 });
             });
 
             this.on('route:showDashboardSection', function (section) {
-                showPageOrSection(pages.dashboard.sections[section]);
+                showSection(pages.dashboard.sections[section]);
             });
 
             this.on('route:showBannedPage', function () {
-                showPageOrSection(pages.banned);
+                showPage(pages.banned);
             });
 
             history.replaceState({}, '', '/');
