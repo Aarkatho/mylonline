@@ -10,8 +10,7 @@ define(['backbone', 'jquery', 'models/user', 'hgn!templates/pages/dashboard'], f
                 success: function (model, response, options) {
                     var markup = dashboardTemplate({
                         user: {
-                            name: response.user.name,
-                            password: response.user.password
+                            //
                         }
                     });
                     self.$el.html(markup);
@@ -21,6 +20,9 @@ define(['backbone', 'jquery', 'models/user', 'hgn!templates/pages/dashboard'], f
                     //
                 }
             });
+        },
+        switchSection: function (section) {
+            console.log('switching section: ' + section);
         }
     });
 });

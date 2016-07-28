@@ -14,6 +14,13 @@ body {
     width: 1280px;
 }
 
+#page-loader {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
 #auth {
     background-color: green;
     display: none;
