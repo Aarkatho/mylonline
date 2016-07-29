@@ -32,3 +32,9 @@ body {
     display: none;
     padding: 10px;
 }
+
+#banned {
+    background-color: orange;
+    display: none;
+    padding: 10px;
+}
