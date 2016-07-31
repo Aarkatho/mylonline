@@ -11,11 +11,16 @@ define(['backbone'], function (BB) {
         pageManager: {
             currentPage: null,
             switchPage: function (pageName, callback) {
+                var self = this;
                 var deferred = BB.$.Deferred();
 
-                this.currentPage ? BB.$('#page-loader').fadeIn(650, deferred.resolve) : deferred.resolve();
+                if (this.currentPage) {
+                    BB.$('#page-loader').fadeIn('fast', function () {
+                        self.currentPage.view.remove();
+                        deferred.resolve();
+                    });
+                } else deferred.resolve();
 
-                var self = this;
                 deferred.done(function () {
                     requirejs(['views/pages/' + pageName], function (PageView) {
                         var pageView = new PageView();
@@ -23,7 +28,7 @@ define(['backbone'], function (BB) {
                         pageView.render(function () {
                             self.currentPage = {name: pageName, view: pageView};
                             pageView.$el.show();
-                            BB.$('#page-loader').fadeOut(650);
+                            BB.$('#page-loader').fadeOut('slow');
                             if (callback) callback();
                         });
                     });
@@ -54,6 +59,7 @@ define(['backbone'], function (BB) {
             if (section) this.pageManager.currentPage.view.switchSection(section);
             else {
                 var self = this;
+
                 this.pageManager.switchPage('auth', function () {
                     self.navigate('auth/login', {trigger: true});
                 });
@@ -63,6 +69,7 @@ define(['backbone'], function (BB) {
             if (section) this.pageManager.currentPage.view.switchSection(section);
             else {
                 var self = this;
+
                 this.pageManager.switchPage('dashboard', function () {
                     self.navigate('dashboard/start', {trigger: true});
                 });
