@@ -10,6 +10,11 @@
         <link rel="stylesheet" type="text/css" href="css/main.css">
         <script src="js/libs/require/require.js"></script>
         <script>
+            // TEST >
+            isLoggedIn = true;
+            isBanned = false;
+            // <
+
             requirejs.config({
                 baseUrl: 'js',
                 urlArgs: 'bust=' + (new Date()).getTime(),
@@ -33,10 +38,6 @@
     </head>
     <body>
         <div id="page-loader"></div>
-        <div id="pages">
-            <div id="auth"></div>
-            <div id="dashboard"></div>
-            <div id="banned"></div>
-        </div>
+        <div id="page"></div>
     </body>
 </html>

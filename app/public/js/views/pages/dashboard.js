@@ -1,25 +1,29 @@
-define(['backbone', 'jquery', 'models/user', 'hgn!templates/pages/dashboard'], function (BB, $, UserModel, dashboardTemplate) {
+define(['backbone', 'models/user', 'hgn!templates/pages/dashboard'], function (BB, UserModel, dashboardTemplate) {
     return BB.View.extend({
-        el: '#dashboard',
+        id: 'dashboard',
         initialize: function () {
             this.user = new UserModel();
         },
-        render: function (callback) {
+        render: function () {
             var self = this;
+            var deferred = BB.$.Deferred();
+
             this.user.fetch({
                 success: function (model, response, options) {
                     var markup = dashboardTemplate({
-                        user: {
-                            //
-                        }
+                        user: {}
                     });
+
                     self.$el.html(markup);
-                    callback();
+                    self.$el.appendTo('#page');
+                    deferred.resolve();
                 },
                 error: function (model, response, options) {
-                    //
+                    deferred.reject();
                 }
             });
+
+            return deferred.promise();
         },
         switchSection: function (section) {
             console.log('switching section: ' + section);

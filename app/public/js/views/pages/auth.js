@@ -1,11 +1,17 @@
-define(['backbone', 'jquery', 'hgn!templates/pages/auth'], function (BB, $, authTemplate) {
+define(['backbone', 'hgn!templates/pages/auth'], function (BB, authTemplate) {
     return BB.View.extend({
-        el: '#auth',
+        id: 'auth',
         initialize: function () {},
-        render: function (callback) {
+        render: function () {
+            var deferred = BB.$.Deferred();
+
             var markup = authTemplate({});
+
             this.$el.html(markup);
-            callback();
+            this.$el.appendTo('#page');
+            deferred.resolve();
+
+            return deferred.promise();
         },
         switchSection: function (section) {
             console.log('switching section: ' + section);

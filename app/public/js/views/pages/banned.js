@@ -1,13 +1,16 @@
 define(['backbone', 'jquery', 'hgn!templates/pages/banned'], function (BB, $, bannedTemplate) {
     return BB.View.extend({
-        el: '#banned',
-        initialize: function () {
-            //
-        },
-        render: function (callback) {
+        id: 'banned',
+        initialize: function () {},
+        render: function () {
+            var deferred = BB.$.Deferred();
+
             var markup = bannedTemplate({});
             this.$el.html(markup);
-            callback();
+            this.$el.appendTo('#page');
+            deferred.resolve();
+
+            return deferred.promise();
         }
     });
 });

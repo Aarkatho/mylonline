@@ -1,7 +1,4 @@
 define(['backbone'], function (BB) {
-    var isLoggedIn = false;
-    var isBanned = false;
-
     return BB.Router.extend({
         routes: {
             'auth(/:section)': 'auth',
@@ -25,14 +22,24 @@ define(['backbone'], function (BB) {
                     requirejs(['views/pages/' + pageName], function (PageView) {
                         var pageView = new PageView();
 
-                        pageView.render(function () {
-                            self.currentPage = {name: pageName, view: pageView};
-                            pageView.$el.show();
-                            BB.$('#page-loader').fadeOut('slow');
-                            if (callback) callback();
-                        });
+                        pageView.render().then(
+                            function () { // done
+                                self.currentPage = {name: pageName, view: pageView};
+                                pageView.$el.show();
+                                BB.$('#page-loader').fadeOut();
+                                if (callback) callback();
+                            },
+                            function () {} // fail ("ha ocurrido un error" + boton recargar pagina? (metodo de pageManager))
+                        );
                     });
                 });
+            },
+            switchSection: function (pageName, sectionName) {
+                if (this.currentPage) {
+                    pageName === this.currentPage.name ?
+                        this.currentPage.view.switchSection(sectionName) :
+                        BB.history.navigate(pageName, {trigger: true});
+                } else BB.history.navigate(pageName, {trigger: true});
             }
         },
         initialize: function () {
@@ -41,37 +48,21 @@ define(['backbone'], function (BB) {
             this.navigate('dashboard', {trigger: true});
         },
         execute: function (callback, args, name) {
-            if (isLoggedIn) {
-                if (isBanned && name !== 'banned') {
-                    this.navigate('banned', {trigger: true});
-                    return false;
-                }
-            } else {
-                if (name !== 'auth') {
-                    this.navigate('auth', {trigger: true});
-                    return false;
-                }
-            }
-
             if (callback) callback.apply(this, args);
         },
         auth: function (section) {
-            if (section) this.pageManager.currentPage.view.switchSection(section);
+            if (section) this.pageManager.switchSection('auth', section);
             else {
-                var self = this;
-
                 this.pageManager.switchPage('auth', function () {
-                    self.navigate('auth/login', {trigger: true});
+                    BB.history.navigate('auth/login', {trigger: true});
                 });
             }
         },
         dashboard: function (section) {
-            if (section) this.pageManager.currentPage.view.switchSection(section);
+            if (section) this.pageManager.switchSection('dashboard', section);
             else {
-                var self = this;
-
                 this.pageManager.switchPage('dashboard', function () {
-                    self.navigate('dashboard/start', {trigger: true});
+                    BB.history.navigate('dashboard/start', {trigger: true});
                 });
             }
         },
