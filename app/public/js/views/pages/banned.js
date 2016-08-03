@@ -1,4 +1,4 @@
-define(['backbone', 'jquery', 'hgn!templates/pages/banned'], function (BB, $, bannedTemplate) {
+define(['backbone', 'hgn!templates/pages/banned'], function (BB, bannedTemplate) {
     return BB.View.extend({
         id: 'banned',
         initialize: function () {},
@@ -6,10 +6,10 @@ define(['backbone', 'jquery', 'hgn!templates/pages/banned'], function (BB, $, ba
             var deferred = BB.$.Deferred();
 
             var markup = bannedTemplate({});
+
             this.$el.html(markup);
             this.$el.appendTo('#page');
             deferred.resolve();
-
             return deferred.promise();
         }
     });

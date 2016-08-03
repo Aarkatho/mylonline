@@ -10,7 +10,6 @@ define(['backbone', 'hgn!templates/pages/auth'], function (BB, authTemplate) {
             this.$el.html(markup);
             this.$el.appendTo('#page');
             deferred.resolve();
-
             return deferred.promise();
         },
         switchSection: function (section) {

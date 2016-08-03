@@ -29,7 +29,7 @@ define(['backbone'], function (BB) {
                                 BB.$('#page-loader').fadeOut();
                                 if (callback) callback();
                             },
-                            function () {} // fail ("ha ocurrido un error" + boton recargar pagina? (metodo de pageManager))
+                            function () {} // fail
                         );
                     });
                 });
