@@ -23,23 +23,23 @@ define(['backbone'], function (BB) {
                         var pageView = new PageView();
 
                         pageView.render().then(
-                            function () { // done
+                            function () {
                                 self.currentPage = {name: pageName, view: pageView};
                                 pageView.$el.show();
                                 BB.$('#page-loader').fadeOut();
                                 if (callback) callback();
                             },
-                            function () {} // fail
+                            function () {
+                                alert('Error al renderizar la pagina: ' + pageName);
+                            }
                         );
                     });
                 });
             },
             switchSection: function (pageName, sectionName) {
-                if (this.currentPage) {
-                    pageName === this.currentPage.name ?
-                        this.currentPage.view.switchSection(sectionName) :
-                        BB.history.navigate(pageName, {trigger: true});
-                } else BB.history.navigate(pageName, {trigger: true});
+                pageName === this.currentPage.name ?
+                    this.currentPage.view.switchSection(sectionName) :
+                    BB.history.navigate(pageName, {trigger: true});
             }
         },
         initialize: function () {
