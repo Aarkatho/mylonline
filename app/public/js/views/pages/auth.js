@@ -1,6 +1,7 @@
 define(['backbone', 'hgn!templates/pages/auth'], function (BB, authTemplate) {
     return BB.View.extend({
         id: 'auth',
+        className: 'page',
         initialize: function () {},
         render: function () {
             var deferred = BB.$.Deferred();

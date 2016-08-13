@@ -1,6 +1,7 @@
 define(['backbone', 'hgn!templates/pages/banned'], function (BB, bannedTemplate) {
     return BB.View.extend({
         id: 'banned',
+        className: 'page',
         initialize: function () {},
         render: function () {
             var deferred = BB.$.Deferred();

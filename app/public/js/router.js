@@ -41,29 +41,41 @@ define(['backbone'], function (BB) {
             switchPageSection: function (pageName, sectionName) {
                 if (pageName === this.currentPage.name) {
                     var self = this;
+                    var deferred = BB.$.Deferred();
 
-                    BB.$('#section-loader').fadeIn('fast', function () {
-                        if (self.currentPageSection) self.currentPageSection.view.remove();
+                    if (this.currentPageSection) {
+                        this.currentPageSection.view.$el.fadeOut('fast', function () {
+                            self.currentPageSection.view.remove();
+                            deferred.resolve();
+                        });
+                    } else deferred.resolve();
 
-                        requirejs(['views/pages/sections/' + pageName + '-' + sectionName],
-                            function (SectionView) {
-                                var sectionView = new SectionView();
+                    deferred.done(function () {
+                        BB.$('#section-loader').fadeIn('fast', function () {
+                            if (self.currentPageSection) self.currentPageSection.view.remove();
 
-                                sectionView.render().then(
-                                    function () {
-                                        self.currentPageSection = {name: sectionName, view: sectionView};
-                                        BB.$('#section-loader').fadeOut();
-                                        console.log('se ha renderizado la seccion: ' + sectionName);
-                                    },
-                                    function () {
-                                        alert('Error al renderizar la seccion: ' + sectionName);
-                                    }
-                                );
-                            },
-                            function () {
-                                alert('No existe la seccion: ' + sectionName);
-                            }
-                        );
+                            requirejs(['views/pages/sections/' + pageName + '-' + sectionName],
+                                function (SectionView) {
+                                    var sectionView = new SectionView();
+
+                                    sectionView.render().then(
+                                        function () {
+                                            self.currentPageSection = {name: sectionName, view: sectionView};
+                                            BB.$('#section-loader').fadeOut('fast', function () {
+                                                sectionView.$el.fadeIn('fast');
+                                            });
+                                            console.log('se ha renderizado la seccion: ' + sectionName);
+                                        },
+                                        function () {
+                                            alert('Error al renderizar la seccion: ' + sectionName);
+                                        }
+                                    );
+                                },
+                                function () {
+                                    alert('No existe la seccion: ' + sectionName);
+                                }
+                            );
+                        });
                     });
                 } else BB.history.navigate(pageName, {trigger: true});
             }

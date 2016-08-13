@@ -35,18 +35,23 @@ body {
 
 #auth {
     background-color: green;
-    display: none;
     padding: 10px;
 }
 
 #dashboard {
     background-color: seagreen;
-    display: none;
     padding: 10px;
 }
 
 #banned {
     background-color: coral;
-    display: none;
     padding: 10px;
+}
+
+.page {
+    display: none;
+}
+
+.section {
+    display: none;
 }
