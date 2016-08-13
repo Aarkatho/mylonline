@@ -7,12 +7,14 @@ define(['backbone'], function (BB) {
         },
         pageManager: {
             currentPage: null,
+            currentPageSection: null,
             switchPage: function (pageName, callback) {
                 var self = this;
                 var deferred = BB.$.Deferred();
 
                 if (this.currentPage) {
                     BB.$('#page-loader').fadeIn('fast', function () {
+                        if (self.currentPageSection) self.currentPageSection.view.remove();
                         self.currentPage.view.remove();
                         deferred.resolve();
                     });
@@ -36,10 +38,34 @@ define(['backbone'], function (BB) {
                     });
                 });
             },
-            switchSection: function (pageName, sectionName) {
-                pageName === this.currentPage.name ?
-                    this.currentPage.view.switchSection(sectionName) :
-                    BB.history.navigate(pageName, {trigger: true});
+            switchPageSection: function (pageName, sectionName) {
+                if (pageName === this.currentPage.name) {
+                    var self = this;
+
+                    BB.$('#section-loader').fadeIn('fast', function () {
+                        if (self.currentPageSection) self.currentPageSection.view.remove();
+
+                        requirejs(['views/pages/sections/' + pageName + '-' + sectionName],
+                            function (SectionView) {
+                                var sectionView = new SectionView();
+
+                                sectionView.render().then(
+                                    function () {
+                                        self.currentPageSection = {name: sectionName, view: sectionView};
+                                        BB.$('#section-loader').fadeOut();
+                                        console.log('se ha renderizado la seccion: ' + sectionName);
+                                    },
+                                    function () {
+                                        alert('Error al renderizar la seccion: ' + sectionName);
+                                    }
+                                );
+                            },
+                            function () {
+                                alert('No existe la seccion: ' + sectionName);
+                            }
+                        );
+                    });
+                } else BB.history.navigate(pageName, {trigger: true});
             }
         },
         initialize: function () {
@@ -51,7 +77,7 @@ define(['backbone'], function (BB) {
             if (callback) callback.apply(this, args);
         },
         auth: function (section) {
-            if (section) this.pageManager.switchSection('auth', section);
+            if (section) this.pageManager.switchPageSection('auth', section);
             else {
                 this.pageManager.switchPage('auth', function () {
                     BB.history.navigate('auth/login', {trigger: true});
@@ -59,7 +85,7 @@ define(['backbone'], function (BB) {
             }
         },
         dashboard: function (section) {
-            if (section) this.pageManager.switchSection('dashboard', section);
+            if (section) this.pageManager.switchPageSection('dashboard', section);
             else {
                 this.pageManager.switchPage('dashboard', function () {
                     BB.history.navigate('dashboard/start', {trigger: true});

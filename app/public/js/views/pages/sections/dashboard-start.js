@@ -1,13 +1,16 @@
 define(['backbone', 'jquery', 'hgn!templates/pages/sections/dashboard-start'], function (BB, $, dashboardStartTemplate) {
     return BB.View.extend({
-        initialize: function () {
-            //
-        },
-        render: function (callback) {
+        id: 'dashboard-start',
+        initialize: function () {},
+        render: function () {
+            var deferred = BB.$.Deferred();
+
             var markup = dashboardStartTemplate({});
-            this.setElement('#start');
+
             this.$el.html(markup);
-            callback();
+            this.$el.appendTo('#dashboard-section');
+            deferred.resolve();
+            return deferred.promise();
         }
     });
 });

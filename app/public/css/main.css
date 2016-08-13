@@ -21,6 +21,18 @@ body {
     width: 100%;
 }
 
+#section-loader {
+    background-color: rgba(55, 55, 255, 0.65);
+    color: brown;
+    display: none;
+    font-size: 28px;
+    left: calc(50% - 250px);
+    line-height: 300px;
+    position: absolute;
+    text-align: center;
+    width: 500px;
+}
+
 #auth {
     background-color: green;
     display: none;
@@ -28,13 +40,13 @@ body {
 }
 
 #dashboard {
-    background-color: yellow;
+    background-color: seagreen;
     display: none;
     padding: 10px;
 }
 
 #banned {
-    background-color: orange;
+    background-color: coral;
     display: none;
     padding: 10px;
 }

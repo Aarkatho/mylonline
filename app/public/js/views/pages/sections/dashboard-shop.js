@@ -1,13 +1,16 @@
 define(['backbone', 'jquery', 'hgn!templates/pages/sections/dashboard-shop'], function (BB, $, dashboardShopTemplate) {
     return BB.View.extend({
-        initialize: function () {
-            //
-        },
-        render: function (callback) {
+        id: 'dashboard-shop',
+        initialize: function () {},
+        render: function () {
+            var deferred = BB.$.Deferred();
+
             var markup = dashboardShopTemplate({});
-            this.setElement('#shop');
+
             this.$el.html(markup);
-            callback();
+            this.$el.appendTo('#dashboard-section');
+            deferred.resolve();
+            return deferred.promise();
         }
     });
 });

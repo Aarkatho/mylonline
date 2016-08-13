@@ -1,13 +1,16 @@
 define(['backbone', 'jquery', 'hgn!templates/pages/sections/auth-register'], function (BB, $, authRegisterTemplate) {
     return BB.View.extend({
-        initialize: function () {
-            //
-        },
-        render: function (callback) {
+        id: 'auth-register',
+        initialize: function () {},
+        render: function () {
+            var deferred = BB.$.Deferred();
+
             var markup = authRegisterTemplate({});
-            this.setElement('#register');
+
             this.$el.html(markup);
-            callback();
+            this.$el.appendTo('#auth-section');
+            deferred.resolve();
+            return deferred.promise();
         }
     });
 });
