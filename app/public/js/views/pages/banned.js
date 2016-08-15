@@ -9,7 +9,7 @@ define(['backbone', 'hgn!templates/pages/banned'], function (BB, bannedTemplate)
             var markup = bannedTemplate({});
 
             this.$el.html(markup);
-            this.$el.appendTo('#page');
+            this.$el.appendTo('#page-container');
             deferred.resolve();
             return deferred.promise();
         }

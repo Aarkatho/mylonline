@@ -16,7 +16,7 @@ define(['backbone', 'models/user', 'hgn!templates/pages/dashboard'], function (B
                     });
 
                     self.$el.html(markup);
-                    self.$el.appendTo('#page');
+                    self.$el.appendTo('#page-container');
                     deferred.resolve();
                 },
                 error: function (model, response, options) {
@@ -25,9 +25,6 @@ define(['backbone', 'models/user', 'hgn!templates/pages/dashboard'], function (B
             });
 
             return deferred.promise();
-        },
-        switchSection: function (section) {
-            console.log('switching section: ' + section);
         }
     });
 });

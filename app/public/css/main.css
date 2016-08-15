@@ -8,50 +8,74 @@ html {
 }
 
 body {
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.5);
     height: 720px;
     position: relative;
     width: 1280px;
 }
 
 #page-loader {
-    background-color: rgba(0, 0, 0, 0.65);
+    background-color: rgba(0, 0, 0, 0.5);
     height: 100%;
     position: absolute;
     width: 100%;
 }
 
-#section-loader {
-    background-color: rgba(55, 55, 255, 0.65);
-    color: brown;
-    display: none;
-    font-size: 28px;
-    left: calc(50% - 250px);
-    line-height: 300px;
-    position: absolute;
-    text-align: center;
-    width: 500px;
-}
-
-#auth {
-    background-color: green;
-    padding: 10px;
-}
-
-#dashboard {
-    background-color: seagreen;
-    padding: 10px;
-}
-
-#banned {
-    background-color: coral;
+#page-container {
+    background-color: brown;
     padding: 10px;
 }
 
 .page {
-    display: none;
+    background-color: white;
+}
+
+#section-loader {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+}
+
+#section-loader:before {
+    content: 'Cargando...';
+}
+
+.section-container {
+    background-color: seagreen;
+    position: relative;
 }
 
 .section {
+}
+
+.page, .section {
     display: none;
+    padding: 10px;
+}
+
+/* auth page */
+
+#auth {
+}
+
+#auth-section-container {
+}
+
+#auth-login, #auth-register {
+}
+
+/* dashboard page */
+
+#dashboard {
+}
+
+#dashboard-section-container {
+}
+
+#dashboard-start, #dashboard-shop {
+}
+
+/* banned page */
+
+#banned {
 }

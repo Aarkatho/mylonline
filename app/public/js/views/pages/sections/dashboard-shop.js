@@ -9,7 +9,7 @@ define(['backbone', 'jquery', 'hgn!templates/pages/sections/dashboard-shop'], fu
             var markup = dashboardShopTemplate({});
 
             this.$el.html(markup);
-            this.$el.appendTo('#dashboard-section');
+            this.$el.appendTo('#dashboard-section-container');
             deferred.resolve();
             return deferred.promise();
         }

@@ -9,12 +9,9 @@ define(['backbone', 'hgn!templates/pages/auth'], function (BB, authTemplate) {
             var markup = authTemplate({});
 
             this.$el.html(markup);
-            this.$el.appendTo('#page');
+            this.$el.appendTo('#page-container');
             deferred.resolve();
             return deferred.promise();
-        },
-        switchSection: function (section) {
-            console.log('switching section: ' + section);
         }
     });
 });

@@ -9,7 +9,7 @@ define(['backbone', 'jquery', 'hgn!templates/pages/sections/auth-login'], functi
             var markup = authLoginTemplate({});
 
             this.$el.html(markup);
-            this.$el.appendTo('#auth-section');
+            this.$el.appendTo('#auth-section-container');
             deferred.resolve();
             return deferred.promise();
         }
