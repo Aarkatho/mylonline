@@ -1,38 +1,58 @@
 var express = require('express');
+var validator = require('validator');
+var _ = require('underscore');
 var jwt = require('jsonwebtoken');
 
-var tokenRequired = require('../middlewares/token-required');
 var User = require('../models/user');
 
 var router = express.Router();
 
 router.post('/user', function (req, res) {
-    User.findOne({email: req.body.email}, function (err, user) {
-        if (err) throw err;
+    var validationErrors = {};
 
-        if (user) {
-            res.json({
-                success: false,
-                message: 'Email no disponible'
-            });
-        } else {
-            var usr = new User({
-                email: req.body.email,
-                password: req.body.password
-            });
+    if (!validator.isAlphanumeric(req.body.username) || !validator.isLength(req.body.username, {min: 4, max: 16})) {
+        validationErrors.usernameError = true;
+    }
 
-            usr.save(function (err) {
-                if (err) throw err;
+    if (!validator.isAlphanumeric(req.body.password) || !validator.isLength(req.body.password, {min: 8, max: 16})) {
+        validationErrors.passwordError = true;
+    }
 
-                res.json({success: true});
-            });
-        }
-    });
+    if (!validator.equals(req.body.password, req.body.rpassword)) validationErrors.rpasswordError = true;
+
+    if (!validator.isEmail(req.body.email)) validationErrors.emailError = true;
+
+    if (_.isEmpty(validationErrors)) {
+        User.find({$or: [{password: req.body.password}, {email: req.body.email}]}, function (err, users) {
+            if (err) throw err;
+
+            var usernameExists;
+            var emailExists;
+            _.findWhere(users, {username: req.body.username}) ? usernameExists = true : usernameExists = false;
+            _.findWhere(users, {email: req.body.email}) ? emailExists = true : emailExists = false;
+
+            if (usernameExists || emailExists) {
+                res.json({success: false, usernameExists: usernameExists, emailExists: emailExists});
+            } else {
+                var usr = new User({
+                    username: req.body.username,
+                    password: req.body.password,
+                    email: req.body.email
+                });
+
+                usr.save(function (err) {
+                    if (err) throw err;
+
+                    res.json({success: true});
+                });
+            }
+        });
+    } else {
+        res.json({success: false, validationErrors: validationErrors});
+    }
 });
 
-router.put('/user', function (req, res) {
-    //
-});
+router.put('/user', function (req, res) {});
 
 router.post('/user/auth/token', function (req, res) {
     User.findOne({email: req.body.email}, function (err, user) {
@@ -62,11 +82,9 @@ router.post('/user/auth/token', function (req, res) {
     });
 });
 
-router.post('/user/auth/facebook', function (req, res) {
-    //
-});
+router.post('/user/auth/facebook', function (req, res) {});
 
-router.get('/user/:name', function (req, res) { // obtener usuario
+router.get('/user/:name', function (req, res) {
     User.findOne({name: req.params.name}, function (err, user) {
         if (err) throw err;
 
@@ -84,6 +102,8 @@ router.get('/user/:name', function (req, res) { // obtener usuario
         }
     });
 });
+
+// TESTS
 
 router.get('/users', function (req, res) {
     User.find({}, function (err, users) {

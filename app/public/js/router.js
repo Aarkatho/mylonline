@@ -83,7 +83,7 @@ define(['backbone'], function (BB) {
         initialize: function () {
             history.replaceState({}, '', '/');
             BB.history.start({pushState: false});
-            this.navigate('dashboard', {trigger: true});
+            this.navigate('auth', {trigger: true});
         },
         execute: function (callback, args, name) {
             if (callback) callback.apply(this, args);
