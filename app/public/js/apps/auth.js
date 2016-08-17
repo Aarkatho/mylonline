@@ -1,5 +1,3 @@
-define(['views/login', 'views/register'], function (LoginView, RegisterView) {
+define(function () {
     console.log('APP CARGADA: apps/auth.js');
-    new LoginView();
-    new RegisterView();
 });

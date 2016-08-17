@@ -26,10 +26,13 @@ define(['backbone'], function (BB) {
 
                         pageView.render().then(
                             function () {
-                                self.currentPage = {name: pageName, view: pageView};
-                                pageView.$el.show();
-                                BB.$('#page-loader').fadeOut();
-                                if (callback) callback();
+                                console.log('se ha renderizado la pagina: ' + pageName);
+                                requirejs(['apps/' + pageName], function () {
+                                    self.currentPage = {name: pageName, view: pageView};
+                                    pageView.$el.show();
+                                    BB.$('#page-loader').fadeOut();
+                                    if (callback) callback();
+                                });
                             },
                             function () {
                                 alert('Error al renderizar la pagina: ' + pageName);
@@ -60,11 +63,13 @@ define(['backbone'], function (BB) {
 
                                     sectionView.render().then(
                                         function () {
-                                            self.currentPageSection = {name: sectionName, view: sectionView};
-                                            BB.$('#section-loader').fadeOut('fast', function () {
-                                                sectionView.$el.fadeIn('fast');
-                                            });
                                             console.log('se ha renderizado la seccion: ' + sectionName);
+                                            requirejs(['apps/' + pageName + '-' + sectionName], function () {
+                                                self.currentPageSection = {name: sectionName, view: sectionView};
+                                                BB.$('#section-loader').fadeOut('fast', function () {
+                                                    sectionView.$el.fadeIn('fast');
+                                                });
+                                            });
                                         },
                                         function () {
                                             alert('Error al renderizar la seccion: ' + sectionName);

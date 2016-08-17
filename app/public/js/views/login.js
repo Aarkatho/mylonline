@@ -4,8 +4,6 @@ define(['backbone', 'jquery'], function (BB, $) {
         events: {
             'submit': 'login'
         },
-        initialize: function () {
-            console.log('inicializando views/login.js');
-        }
+        initialize: function () {}
     });
 });

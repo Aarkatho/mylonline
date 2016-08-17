@@ -8,49 +8,56 @@ var User = require('../models/user');
 var router = express.Router();
 
 router.post('/user', function (req, res) {
-    var uname = req.body.username.toLowerCase();
-    var uemail = req.body.email.toLowerCase();
-    var validationErrors = {};
+    var usernameValidationError;
+    var passwordValidationError;
+    var rpasswordValidationError;
+    var emailValidationError;
 
-    !validator.isAlphanumeric(uname) || !validator.isLength(uname, {min: 4, max: 16}) ?
-        validationErrors.usernameError = true : validationErrors.usernameError = false;
+    !validator.isAlphanumeric(req.body.username) || !validator.isLength(req.body.username, {min: 4, max: 16}) ?
+        usernameValidationError = true : usernameValidationError = false;
 
     !validator.isAlphanumeric(req.body.password) || !validator.isLength(req.body.password, {min: 8, max: 16}) ?
-        validationErrors.passwordError = true : validationErrors.passwordError = false;
+        passwordValidationError = true : passwordValidationError = false;
 
     !validator.equals(req.body.password, req.body.rpassword) ?
-        validationErrors.rpasswordError = true : validationErrors.rpasswordError = false;
+        rpasswordValidationError = true : rpasswordValidationError = false;
 
-    !validator.isEmail(uemail) ?
-        validationErrors.emailError = true : validationErrors.emailError = false;
+    !validator.isEmail(req.body.email) ?
+        emailValidationError = true : emailValidationError = false;
 
-    if (_.contains(validationErrors, true)) {
+    if (usernameValidationError || passwordValidationError || rpasswordValidationError || emailValidationError) {
         res.json({
             success: false,
-            errorType: 'validation',
-            validationErrors: validationErrors
+            errorType: 'VALIDATION',
+            usernameValidationError: usernameValidationError,
+            passwordValidationError: passwordValidationError,
+            rpasswordValidationError: rpasswordValidationError,
+            emailValidationError: emailValidationError
         });
     } else {
-        User.find({$or: [{username: uname}, {email: uemail}]}, function (err, users) {
+        var lowerCaseUsername = req.body.username.toLowerCase();
+        var lowerCaseEmail = req.body.email.toLowerCase();
+
+        User.find({$or: [{username: lowerCaseUsername}, {email: lowerCaseEmail}]}, function (err, users) {
             if (err) throw err;
 
             var usernameExists;
             var emailExists;
-            _.findWhere(users, {username: uname}) ? usernameExists = true : usernameExists = false;
-            _.findWhere(users, {email: uemail}) ? emailExists = true : emailExists = false;
+            _.findWhere(users, {username: lowerCaseUsername}) ? usernameExists = true : usernameExists = false;
+            _.findWhere(users, {email: lowerCaseEmail}) ? emailExists = true : emailExists = false;
 
             if (usernameExists || emailExists) {
                 res.json({
                     success: false,
-                    errorType: 'not available',
+                    errorType: 'AVAILABILITY',
                     usernameExists: usernameExists,
                     emailExists: emailExists
                 });
             } else {
                 var usr = new User({
-                    username: uname,
+                    username: lowerCaseUsername,
                     password: req.body.password,
-                    email: uemail
+                    email: lowerCaseEmail
                 });
 
                 usr.save(function (err) {
@@ -92,6 +99,8 @@ router.post('/user/auth/token', function (req, res) {
         }
     });
 });
+
+router.post('/user/auth/token', function (req, res) {});
 
 router.post('/user/auth/facebook', function (req, res) {});
 
