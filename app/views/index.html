@@ -10,9 +10,6 @@
         <link rel="stylesheet" type="text/css" href="css/main.css">
         <script src="js/libs/require/require.js"></script>
         <script>
-            var isLogedIn = false;
-            var isBanned = false;
-
             requirejs.config({
                 baseUrl: 'js',
                 urlArgs: 'bust=' + (new Date()).getTime(),
@@ -35,7 +32,9 @@
         </script>
     </head>
     <body>
-        <div id="page-loader"></div>
+        <div id="page-loader">
+            <p>Cargando página...</p>
+        </div>
         <div id="page-container"></div>
     </body>
 </html>

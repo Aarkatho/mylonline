@@ -15,33 +15,39 @@ body {
 }
 
 #page-loader {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 1);
     height: 100%;
     position: absolute;
     width: 100%;
+    z-index: 1000;
+}
+
+#page-loader p {
+    bottom: 10px;
+    color: rgb(175, 175, 175);
+    position: absolute;
+    right: 10px;
 }
 
 #page-container {
-    background-color: brown;
+    background-color: rgb(175, 175, 175);
     padding: 10px;
 }
 
 .page {
-    background-color: white;
+    background-color: rgb(200, 200, 200);
 }
 
 #section-loader {
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
     padding: 10px;
 }
 
 #section-loader:before {
-    content: 'Cargando...';
+    content: 'Cargando sección...';
 }
 
 .section-container {
-    background-color: seagreen;
+    background-color: rgb(225, 225, 225);
     position: relative;
 }
 
