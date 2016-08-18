@@ -26,13 +26,14 @@ router.post('/user', function (req, res) {
         emailValidationError = true : emailValidationError = false;
 
     if (usernameValidationError || passwordValidationError || rpasswordValidationError || emailValidationError) {
-        res.json({
-            success: false,
-            errorType: 'VALIDATION',
-            usernameValidationError: usernameValidationError,
-            passwordValidationError: passwordValidationError,
-            rpasswordValidationError: rpasswordValidationError,
-            emailValidationError: emailValidationError
+        res.status(400).json({
+            errorType: 'validation',
+            errors: {
+                usernameValidationError: usernameValidationError,
+                passwordValidationError: passwordValidationError,
+                rpasswordValidationError: rpasswordValidationError,
+                emailValidationError: emailValidationError
+            }
         });
     } else {
         var lowerCaseUsername = req.body.username.toLowerCase();
@@ -47,11 +48,12 @@ router.post('/user', function (req, res) {
             _.findWhere(users, {email: lowerCaseEmail}) ? emailExists = true : emailExists = false;
 
             if (usernameExists || emailExists) {
-                res.json({
-                    success: false,
-                    errorType: 'AVAILABILITY',
-                    usernameExists: usernameExists,
-                    emailExists: emailExists
+                res.status(400).json({
+                    errorType: 'availability',
+                    erros: {
+                        usernameExists: usernameExists,
+                        emailExists: emailExists
+                    }
                 });
             } else {
                 var usr = new User({
@@ -63,7 +65,7 @@ router.post('/user', function (req, res) {
                 usr.save(function (err) {
                     if (err) throw err;
 
-                    res.json({success: true});
+                    res.sendStatus(200);
                 });
             }
         });
@@ -73,34 +75,19 @@ router.post('/user', function (req, res) {
 router.put('/user', function (req, res) {});
 
 router.post('/user/auth/token', function (req, res) {
-    User.findOne({email: req.body.email}, function (err, user) {
+    var lowerCaseUsername = req.body.username.toLowerCase();
+
+    User.findOne({username: lowerCaseUsername}, function (err, user) {
         if (err) throw err;
 
         if (user) {
-            if (req.body.password != user.password) {
-                res.json({
-                    success: false,
-                    message: 'Contraseña incorrecta'
-                });
-            } else {
-                var token = jwt.sign({name: user.name}, req.app.get('secret key'), {expiresIn: '30s'});
-
-                res.json({
-                    success: true,
-                    message: 'Has iniciado sesión correctamente',
-                    token: token
-                });
-            }
-        } else {
-            res.json({
-                success: false,
-                message: 'Usuario no encontrado'
-            });
-        }
+            if (req.body.password === user.password) {
+                var token = jwt.sign({username: lowerCaseUsername}, req.app.get('secret key'), {expiresIn: '90m'});
+                res.status(200).json({token: token});
+            } else res.sendStatus(400);
+        } else res.sendStatus(400);
     });
 });
-
-router.post('/user/auth/token', function (req, res) {});
 
 router.post('/user/auth/facebook', function (req, res) {});
 

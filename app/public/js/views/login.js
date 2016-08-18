@@ -4,6 +4,26 @@ define(['backbone'], function (BB) {
         events: {
             'submit': 'login'
         },
-        initialize: function () {}
+        initialize: function () {},
+        login: function (event) {
+            event.preventDefault();
+            var username = this.$('input[name="username"]').val();
+            var password = this.$('input[name="password"]').val();
+
+            var $post = BB.$.post('/api/user/auth/token', {
+                username: username,
+                password: password
+            });
+
+            $post.done(function (data) {
+                console.log('done!', data);
+            });
+
+            $post.fail(function (data) {
+                console.log('fail!', data);
+            });
+
+            $post.always(function (data) {});
+        }
     });
 });
