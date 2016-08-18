@@ -12,7 +12,12 @@ define(['backbone'], function (BB) {
             var rpassword = this.$('input[name="rpassword"]').val();
             var email = this.$('input[name="email"]').val();
 
-            console.log('--- values ---', username, password, rpassword, email, '--- /values ---');
+            console.log('--- values ---');
+            console.log(username);
+            console.log(password);
+            console.log(rpassword);
+            console.log(email);
+            console.log('--- /values ---');
 
             var $post = BB.$.post('/api/user', {
                 username: username,

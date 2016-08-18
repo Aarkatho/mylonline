@@ -1,4 +1,3 @@
-define(['router'], function (Router) {
-    console.log('APP CARGADA: apps/main.js');
-    new Router();
+define(['router'], function (router) {
+    console.log('--- APP PRINCIPAL CARGADA ---');
 });

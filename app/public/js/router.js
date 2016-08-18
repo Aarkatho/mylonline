@@ -1,5 +1,5 @@
 define(['backbone'], function (BB) {
-    return BB.Router.extend({
+    var Router = BB.Router.extend({
         routes: {
             'auth(/:section)': 'auth',
             'dashboard(/:section)': 'dashboard',
@@ -25,18 +25,23 @@ define(['backbone'], function (BB) {
                         var pageView = new PageView();
 
                         pageView.render().then(
-                            function () {
-                                console.log('se ha renderizado la pagina: ' + pageName);
-                                requirejs(['apps/' + pageName], function () {
-                                    self.currentPage = {name: pageName, view: pageView};
+                            function () { // done
+                                requirejs(['apps/' + pageName], function (pageApp) {
+                                    pageApp.initialize();
+
+                                    self.currentPage = {
+                                        name: pageName,
+                                        view: pageView,
+                                        subViews: pageApp.subViews
+                                    };
+
                                     pageView.$el.show();
                                     BB.$('#page-loader').fadeOut();
                                     if (callback) callback();
+                                    console.log(self.currentPage); // test
                                 });
                             },
-                            function () {
-                                alert('Error al renderizar la pagina: ' + pageName);
-                            }
+                            function () {} // fail
                         );
                     });
                 });
@@ -55,30 +60,31 @@ define(['backbone'], function (BB) {
 
                     deferred.done(function () {
                         BB.$('#section-loader').fadeIn('fast', function () {
-                            if (self.currentPageSection) self.currentPageSection.view.remove();
-
                             requirejs(['views/pages/sections/' + pageName + '-' + sectionName],
-                                function (SectionView) {
+                                function (SectionView) { // done
                                     var sectionView = new SectionView();
 
                                     sectionView.render().then(
-                                        function () {
-                                            console.log('se ha renderizado la seccion: ' + sectionName);
-                                            requirejs(['apps/' + pageName + '-' + sectionName], function () {
-                                                self.currentPageSection = {name: sectionName, view: sectionView};
+                                        function () { // done
+                                            requirejs(['apps/' + pageName + '-' + sectionName], function (sectionApp) {
+                                                sectionApp.initialize();
+
+                                                self.currentPageSection = {
+                                                    name: sectionName,
+                                                    view: sectionView,
+                                                    subViews: sectionApp.subViews
+                                                };
+
                                                 BB.$('#section-loader').fadeOut('fast', function () {
                                                     sectionView.$el.fadeIn('fast');
                                                 });
+                                                console.log(self.currentPageSection); // test
                                             });
                                         },
-                                        function () {
-                                            alert('Error al renderizar la seccion: ' + sectionName);
-                                        }
+                                        function () {} // fail
                                     );
                                 },
-                                function () {
-                                    alert('No existe la seccion: ' + sectionName);
-                                }
+                                function () {} // fail
                             );
                         });
                     });
@@ -113,4 +119,6 @@ define(['backbone'], function (BB) {
             this.pageManager.switchPage('banned');
         }
     });
+
+    return new Router();
 });
