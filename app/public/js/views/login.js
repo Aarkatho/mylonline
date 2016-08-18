@@ -23,7 +23,7 @@ define(['backbone'], function (BB) {
                 console.log('fail!', data);
             });
 
-            $post.always(function (data) {});
+            $post.always(function () {});
         }
     });
 });

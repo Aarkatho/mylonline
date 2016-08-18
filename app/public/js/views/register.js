@@ -19,15 +19,16 @@ define(['backbone'], function (BB) {
                 email: email
             });
 
-            $post.done(function (data) {
-                console.log('done!', data);
+            $post.done(function () {
+                alert('Ahora debes ingresar con tu nueva cuenta');
+                BB.history.navigate('auth/login', {trigger: true});
             });
 
             $post.fail(function (data) {
                 console.log('fail!', data);
             });
 
-            $post.always(function (data) {});
+            $post.always(function () {});
         }
     });
 });

@@ -16,7 +16,7 @@ router.post('/user', function (req, res) {
     !validator.isAlphanumeric(req.body.username) || !validator.isLength(req.body.username, {min: 4, max: 16}) ?
         usernameValidationError = true : usernameValidationError = false;
 
-    !validator.isAlphanumeric(req.body.password) || !validator.isLength(req.body.password, {min: 8, max: 16}) ?
+    !validator.isAlphanumeric(req.body.password) || !validator.isLength(req.body.password, {min: 3, max: 16}) ?
         passwordValidationError = true : passwordValidationError = false;
 
     !validator.equals(req.body.password, req.body.rpassword) ?

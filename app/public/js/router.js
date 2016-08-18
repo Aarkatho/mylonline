@@ -38,7 +38,6 @@ define(['backbone'], function (BB) {
                                     pageView.$el.show();
                                     BB.$('#page-loader').fadeOut();
                                     if (callback) callback();
-                                    console.log(self.currentPage); // test
                                 });
                             },
                             function () {} // fail
@@ -78,7 +77,6 @@ define(['backbone'], function (BB) {
                                                 BB.$('#section-loader').fadeOut('fast', function () {
                                                     sectionView.$el.fadeIn('fast');
                                                 });
-                                                console.log(self.currentPageSection); // test
                                             });
                                         },
                                         function () {} // fail
