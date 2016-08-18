@@ -14,8 +14,8 @@ define(['backbone'], function (BB) {
 
                 if (this.currentPage) {
                     BB.$('#page-loader').fadeIn('fast', function () {
-                        if (self.currentPageSection) self.currentPageSection.view.remove();
-                        self.currentPage.view.remove();
+                        if (self.currentPageSection) self.removeViews(self.currentPageSection);
+                        self.removeViews(self.currentPage);
                         deferred.resolve();
                     });
                 } else deferred.resolve();
@@ -53,7 +53,7 @@ define(['backbone'], function (BB) {
 
                     if (this.currentPageSection) {
                         this.currentPageSection.view.$el.fadeOut('fast', function () {
-                            self.currentPageSection.view.remove();
+                            self.removeViews(self.currentPageSection);
                             deferred.resolve();
                         });
                     } else deferred.resolve();
@@ -89,6 +89,15 @@ define(['backbone'], function (BB) {
                         });
                     });
                 } else BB.history.navigate(pageName, {trigger: true});
+            },
+            removeViews: function (target) {
+                if (!_.isEmpty(target.subViews)) {
+                    _.each(target.subViews, function (subView) {
+                        subView.remove();
+                    });
+                }
+
+                target.view.remove();
             }
         },
         initialize: function () {
