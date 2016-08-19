@@ -12,7 +12,7 @@ define(['backbone'], function (BB) {
             var rpassword = this.$('input[name="rpassword"]').val();
             var email = this.$('input[name="email"]').val();
 
-            var $post = BB.$.post('/api/user', {
+            var $post = BB.$.post('/user', {
                 username: username,
                 password: password,
                 rpassword: rpassword,
@@ -20,7 +20,7 @@ define(['backbone'], function (BB) {
             });
 
             $post.done(function () {
-                alert('Ahora debes ingresar con tu nueva cuenta');
+                alert('Tu cuenta ha sido creada, ahora debes ingresar con ella.');
                 BB.history.navigate('auth/login', {trigger: true});
             });
 

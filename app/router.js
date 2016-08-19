@@ -1,11 +1,14 @@
 var express = require('express');
 var validator = require('validator');
 var _ = require('underscore');
-var jwt = require('jsonwebtoken');
 
-var User = require('../models/user');
+var User = require('./models/user');
 
 var router = express.Router();
+
+router.get('/', function (req, res) {
+    res.render('index', {});
+});
 
 router.post('/user', function (req, res) {
     var usernameValidationError;
@@ -72,9 +75,7 @@ router.post('/user', function (req, res) {
     }
 });
 
-router.put('/user', function (req, res) {});
-
-router.post('/user/auth/token', function (req, res) {
+router.post('/authenticate', function (req, res) {
     var lowerCaseUsername = req.body.username.toLowerCase();
 
     User.findOne({username: lowerCaseUsername}, function (err, user) {
@@ -82,41 +83,17 @@ router.post('/user/auth/token', function (req, res) {
 
         if (user) {
             if (req.body.password === user.password) {
-                var token = jwt.sign({username: lowerCaseUsername}, req.app.get('secret key'), {expiresIn: '90m'});
-                res.status(200).json({token: token});
+                res.sendStatus(200);
             } else res.sendStatus(400);
         } else res.sendStatus(400);
     });
 });
 
-router.post('/user/auth/facebook', function (req, res) {});
-
-router.get('/user/:name', function (req, res) {
-    User.findOne({name: req.params.name}, function (err, user) {
-        if (err) throw err;
-
-        if (user) {
-            res.json({
-                success: true,
-                message: 'Usuario encontrado',
-                user: user
-            });
-        } else {
-            res.json({
-                success: false,
-                message: 'Usuario no encontrado'
-            });
-        }
-    });
-});
-
-// TESTS
-
 router.get('/users', function (req, res) {
     User.find({}, function (err, users) {
         if(err) throw err;
 
-        res.json(users);
+        res.status(200).json(users);
     });
 });
 

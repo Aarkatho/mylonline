@@ -10,7 +10,7 @@ define(['backbone'], function (BB) {
             var username = this.$('input[name="username"]').val();
             var password = this.$('input[name="password"]').val();
 
-            var $post = BB.$.post('/api/user/auth/token', {
+            var $post = BB.$.post('/authenticate', {
                 username: username,
                 password: password
             });

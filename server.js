@@ -1,37 +1,41 @@
-// packages
-
 var express = require('express');
-var logger = require('morgan');
+var http = require('http');
+var socketIo = require('socket.io');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var hoganExpress = require('hogan-express');
+var morgan = require('morgan');
 
 var config = require('./config');
-var basicRoutes = require('./app/routes/basic');
-var apiRoutes = require('./app/routes/api');
+var router = require('./app/router');
 
 var app = express();
+var server = http.Server(app);
+var io = socketIo(server);
 
-app.set('secret key', config['secret key']);
-
-// view engine setup
 app.set('views', __dirname + '/app/views');
 app.set('view engine', 'html');
 app.engine('html', hoganExpress);
 
-app.use(logger('dev'));
+app.use(morgan('dev'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(express.static(__dirname + '/app/public'));
 
-app.use('/', basicRoutes);
-app.use('/api', apiRoutes);
+app.use('/', router);
 
 // connect database
+
 mongoose.connect(config['database'], function (err) {
-    if(err) throw err;
+    if (err) throw err;
+});
+
+// io
+
+io.on('connection', function (socket) {
+    console.log('a user connected.');
 });
 
 // start server
