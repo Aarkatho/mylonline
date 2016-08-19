@@ -3,7 +3,7 @@ define(['views/register'], function (RegisterView) {
 
     return {
         initialize: function () {
-            this.subViews = [new RegisterView()];
+            this.views = [new RegisterView()];
         }
     };
 });

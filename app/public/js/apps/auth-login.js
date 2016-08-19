@@ -3,7 +3,7 @@ define(['views/login'], function (LoginView) {
 
     return {
         initialize: function () {
-            this.subViews = [new LoginView()];
+            this.views = [new LoginView()];
         }
     };
 });

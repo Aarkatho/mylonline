@@ -32,7 +32,7 @@ define(['backbone'], function (BB) {
                                     self.currentPage = {
                                         name: pageName,
                                         view: pageView,
-                                        subViews: pageApp.subViews
+                                        subViews: pageApp.views
                                     };
 
                                     pageView.$el.show();
@@ -71,7 +71,7 @@ define(['backbone'], function (BB) {
                                                 self.currentPageSection = {
                                                     name: sectionName,
                                                     view: sectionView,
-                                                    subViews: sectionApp.subViews
+                                                    subViews: sectionApp.views
                                                 };
 
                                                 BB.$('#section-loader').fadeOut('fast', function () {

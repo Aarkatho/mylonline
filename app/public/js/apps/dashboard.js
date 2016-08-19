@@ -3,7 +3,7 @@ define(function () {
 
     return {
         initialize: function () {
-            this.subViews = false;
+            this.views = false;
         }
     };
 });
