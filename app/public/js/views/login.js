@@ -1,4 +1,4 @@
-define(['backbone'], function (BB) {
+define(['backbone', 'https://cdn.socket.io/socket.io-1.4.5.js'], function (BB, io) {
     return BB.View.extend({
         el: '#login-form',
         events: {
@@ -17,6 +17,7 @@ define(['backbone'], function (BB) {
 
             $post.done(function (data) {
                 console.log('done!', data);
+                var socket = io();
             });
 
             $post.fail(function (data) {

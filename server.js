@@ -1,16 +1,16 @@
 var express = require('express');
 var http = require('http');
 var socketIo = require('socket.io');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
 var hoganExpress = require('hogan-express');
 var morgan = require('morgan');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
 var config = require('./config');
 var router = require('./app/router');
 
 var app = express();
-var server = http.Server(app);
+var server = http.createServer(app);
 var io = socketIo(server);
 
 app.set('views', __dirname + '/app/views');
@@ -41,6 +41,6 @@ io.on('connection', function (socket) {
 // start server
 var port = process.env.PORT || 2812;
 
-app.listen(port, function () {
+server.listen(port, function () {
     console.log('Listening on port ' + port + '.');
 });
