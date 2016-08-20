@@ -1,5 +1,8 @@
 define(['backbone'], function (BB) {
     return BB.Model.extend({
-        url: '/user/narkatho'
+        defaults: {
+            isLoggedIn: false
+        },
+        urlRoot: '/user'
     });
 });

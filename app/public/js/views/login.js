@@ -17,9 +17,9 @@ define(['backbone', 'https://cdn.socket.io/socket.io-1.4.5.js', 'models/user'], 
                 password: password
             });
 
-            $post.done(function () {
-                isLoggedIn = true;
+            $post.done(function (userId) {
                 alert(username + ', bienivenido a MyL Online.');
+                currentUser.set({id: userId, isLoggedIn: true});
                 BB.history.navigate('dashboard', {trigger: true});
             });
 

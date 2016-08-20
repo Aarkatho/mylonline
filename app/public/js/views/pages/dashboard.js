@@ -1,15 +1,13 @@
-define(['backbone', 'models/user', 'hgn!templates/pages/dashboard'], function (BB, UserModel, dashboardTemplate) {
+define(['backbone', 'hgn!templates/pages/dashboard'], function (BB, dashboardTemplate) {
     return BB.View.extend({
         id: 'dashboard',
         className: 'page',
-        initialize: function () {
-            this.user = new UserModel();
-        },
+        initialize: function () {},
         render: function () {
             var self = this;
             var deferred = BB.$.Deferred();
 
-            this.user.fetch({
+            currentUser.fetch({
                 success: function (model, response, options) {
                     console.log(response);
                     var markup = dashboardTemplate({

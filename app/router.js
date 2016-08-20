@@ -7,7 +7,6 @@ var User = require('./models/user');
 var router = express.Router();
 
 router.get('/', function (req, res) {
-    console.log(req.session);
     res.render('index', {});
 });
 
@@ -85,35 +84,30 @@ router.post('/login', function (req, res) {
         if (user) {
             if (req.body.password === user.password) {
                 req.session.username = lowerCaseUsername;
-                res.status(200).send();
+                res.status(200).json(user.userId);
             } else res.sendStatus(400);
         } else res.sendStatus(400);
     });
 });
 
-// sin pulir ->
+router.get('/user/:userId', function (req, res) {
+    if (validator.isInt(req.params.userId, {min: 1})) {
+        User.findOne({userId: req.params.userId}, function (err, user) {
+            if (err) throw err;
 
-router.get('/user/:name', function (req, res) {
-    User.findOne({id: req.params.id}, function (err, user) {
-        if (err) throw err;
-
-        if (user) {
-            res.json({
-                success: true,
-                message: 'Usuario encontrado v2',
-                user: user
-            });
-        } else {
-            res.json({
-                success: false,
-                message: 'Usuario no encontrado'
-            });
-        }
-    });
+            if (user) {
+                res.status(200).json({
+                    username: user.username,
+                    email: user.email,
+                    isAdmin: user.isAdmin,
+                    isBanned: user.isBanned
+                });
+            } else res.sendStatus(404);
+        });
+    } else res.sendStatus(400);
 });
 
 router.get('/users', function (req, res) {
-    console.log(req.session);
     User.find({}, function (err, users) {
         if(err) throw err;
 

@@ -105,6 +105,10 @@ define(['backbone'], function (BB) {
             this.navigate('auth', {trigger: true});
         },
         execute: function (callback, args, name) {
+            if (name === 'dashboard' && !currentUser.attributes.isLoggedIn) {
+                history.back();
+                return false;
+            }
             if (callback) callback.apply(this, args);
         },
         auth: function (section) {
