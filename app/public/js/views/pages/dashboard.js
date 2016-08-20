@@ -11,6 +11,7 @@ define(['backbone', 'models/user', 'hgn!templates/pages/dashboard'], function (B
 
             this.user.fetch({
                 success: function (model, response, options) {
+                    console.log(response);
                     var markup = dashboardTemplate({
                         user: {}
                     });

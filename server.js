@@ -5,6 +5,7 @@ var hoganExpress = require('hogan-express');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var expressSession = require('express-session');
 
 var config = require('./config');
 var router = require('./app/router');
@@ -13,11 +14,17 @@ var app = express();
 var server = http.createServer(app);
 var io = socketIo(server);
 
+app.use(expressSession({
+    secret: 'this is a test',
+    resave: false,
+    saveUninitialized: true
+}));
+
 app.set('views', __dirname + '/app/views');
 app.set('view engine', 'html');
 app.engine('html', hoganExpress);
 
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -36,6 +43,15 @@ mongoose.connect(config['database'], function (err) {
 
 io.on('connection', function (socket) {
     console.log('a user connected.');
+    console.log(socket.request.session);
+
+    socket.on('disconnect', function () {
+        console.log(socket.request.session);
+        if (socket.request.session) {
+            socket.request.session.destroy();
+            console.log(socket.request.session);
+        }
+    });
 });
 
 // start server

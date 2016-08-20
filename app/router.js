@@ -7,6 +7,7 @@ var User = require('./models/user');
 var router = express.Router();
 
 router.get('/', function (req, res) {
+    console.log(req.session);
     res.render('index', {});
 });
 
@@ -75,7 +76,7 @@ router.post('/user', function (req, res) {
     }
 });
 
-router.post('/authenticate', function (req, res) {
+router.post('/login', function (req, res) {
     var lowerCaseUsername = req.body.username.toLowerCase();
 
     User.findOne({username: lowerCaseUsername}, function (err, user) {
@@ -83,13 +84,36 @@ router.post('/authenticate', function (req, res) {
 
         if (user) {
             if (req.body.password === user.password) {
-                res.sendStatus(200);
+                req.session.username = lowerCaseUsername;
+                res.status(200).send();
             } else res.sendStatus(400);
         } else res.sendStatus(400);
     });
 });
 
+// sin pulir ->
+
+router.get('/user/:name', function (req, res) {
+    User.findOne({id: req.params.id}, function (err, user) {
+        if (err) throw err;
+
+        if (user) {
+            res.json({
+                success: true,
+                message: 'Usuario encontrado v2',
+                user: user
+            });
+        } else {
+            res.json({
+                success: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+    });
+});
+
 router.get('/users', function (req, res) {
+    console.log(req.session);
     User.find({}, function (err, users) {
         if(err) throw err;
 

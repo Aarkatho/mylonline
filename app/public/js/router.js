@@ -14,8 +14,8 @@ define(['backbone'], function (BB) {
 
                 if (this.currentPage) {
                     BB.$('#page-loader').fadeIn('fast', function () {
-                        if (self.currentPageSection) self.removeViews(self.currentPageSection);
-                        self.removeViews(self.currentPage);
+                        if (self.currentPageSection) self.remove(self.currentPageSection);
+                        self.remove(self.currentPage);
                         deferred.resolve();
                     });
                 } else deferred.resolve();
@@ -25,7 +25,7 @@ define(['backbone'], function (BB) {
                         var pageView = new PageView();
 
                         pageView.render().then(
-                            function () { // done
+                            function () {
                                 requirejs(['apps/' + pageName], function (pageApp) {
                                     pageApp.initialize();
 
@@ -40,7 +40,7 @@ define(['backbone'], function (BB) {
                                     if (callback) callback();
                                 });
                             },
-                            function () {} // fail
+                            function () {}
                         );
                     });
                 });
@@ -52,7 +52,7 @@ define(['backbone'], function (BB) {
 
                     if (this.currentPageSection) {
                         this.currentPageSection.view.$el.fadeOut('fast', function () {
-                            self.removeViews(self.currentPageSection);
+                            self.remove(self.currentPageSection);
                             deferred.resolve();
                         });
                     } else deferred.resolve();
@@ -60,11 +60,11 @@ define(['backbone'], function (BB) {
                     deferred.done(function () {
                         BB.$('#section-loader').fadeIn('fast', function () {
                             requirejs(['views/pages/sections/' + pageName + '-' + sectionName],
-                                function (SectionView) { // done
+                                function (SectionView) {
                                     var sectionView = new SectionView();
 
                                     sectionView.render().then(
-                                        function () { // done
+                                        function () {
                                             requirejs(['apps/' + pageName + '-' + sectionName], function (sectionApp) {
                                                 sectionApp.initialize();
 
@@ -79,16 +79,16 @@ define(['backbone'], function (BB) {
                                                 });
                                             });
                                         },
-                                        function () {} // fail
+                                        function () {}
                                     );
                                 },
-                                function () {} // fail
+                                function () {}
                             );
                         });
                     });
                 } else BB.history.navigate(pageName, {trigger: true});
             },
-            removeViews: function (target) {
+            remove: function (target) {
                 if (!_.isEmpty(target.subViews)) {
                     _.each(target.subViews, function (subView) {
                         subView.remove();
@@ -96,6 +96,7 @@ define(['backbone'], function (BB) {
                 }
 
                 target.view.remove();
+                target = null;
             }
         },
         initialize: function () {

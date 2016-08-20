@@ -10,6 +10,9 @@
         <link rel="stylesheet" type="text/css" href="css/main.css">
         <script src="js/libs/require/require.js"></script>
         <script>
+            var isLoggedIn = false;
+            var isBanned = false;
+
             requirejs.config({
                 baseUrl: 'js',
                 urlArgs: 'bust=' + (new Date()).getTime(),
