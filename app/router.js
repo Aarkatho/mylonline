@@ -44,7 +44,6 @@ router.post('/user', function (req, res) {
 
         User.find({$or: [{username: lowerCaseUsername}, {email: lowerCaseEmail}]}, function (err, users) {
             if (err) throw err;
-
             var usernameExists;
             var emailExists;
             _.findWhere(users, {username: lowerCaseUsername}) ? usernameExists = true : usernameExists = false;
@@ -84,24 +83,38 @@ router.post('/login', function (req, res) {
         if (user) {
             if (req.body.password === user.password) {
                 req.session.username = lowerCaseUsername;
+                req.session.isAdmin = user.isAdmin;
+                req.session.isBanned = user.isBanned;
                 res.status(200).json(user.userId);
             } else res.sendStatus(400);
         } else res.sendStatus(404);
     });
 });
 
-router.get('/user/:userId', function (req, res) {
+var isLoggedIn = function (req, res, next) {
+    if (req.session && !req.session.isBanned) next();
+    else return res.sendStatus(401);
+};
+
+router.get('/user/:userId', isLoggedIn, function (req, res) {
     if (validator.isInt(req.params.userId, {min: 1})) {
         User.findOne({userId: req.params.userId}, function (err, user) {
             if (err) throw err;
 
             if (user) {
-                res.status(200).json({
+                var data = {
                     username: user.username,
-                    email: user.email,
-                    isAdmin: user.isAdmin,
-                    isBanned: user.isBanned
-                });
+                    email: user.email
+                };
+
+                if (req.session.username === user.username) {
+                    _.extend(data, {
+                        isAdmin: user.isAdmin,
+                        isBanned: user.isBanned
+                    });
+                }
+
+                res.status(200).json(data);
             } else res.sendStatus(404);
         });
     } else res.sendStatus(400);
@@ -112,7 +125,6 @@ router.get('/user/:userId', function (req, res) {
 router.get('/users', function (req, res) {
     User.find({}, function (err, users) {
         if(err) throw err;
-
         res.status(200).json(users);
     });
 });
