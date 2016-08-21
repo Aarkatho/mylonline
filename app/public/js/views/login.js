@@ -18,9 +18,20 @@ define(['backbone', 'https://cdn.socket.io/socket.io-1.4.5.js', 'models/user'], 
             });
 
             $post.done(function (userId) {
-                alert(username + ', bienivenido a MyL Online.');
-                currentUser.set({id: userId, isLoggedIn: true});
-                BB.history.navigate('dashboard', {trigger: true});
+                currentUser.set({id: userId});
+                currentUser.fetch({
+                    success: function (model, response, options) {
+                        alert(username + ', bienvenido a Myl Online.');
+                        currentUser.set({isLoggedIn: true});
+
+                        response.isBanned ?
+                            BB.history.navigate('banned', {trigger: true}) :
+                            BB.history.navigate('dashboard', {trigger: true});
+                    },
+                    error: function (model, response, options) {
+                        alert('Ha ocurrido un error al intentar obtener los datos de tu cuenta.');
+                    }
+                });
             });
 
             $post.fail(function (data) {
@@ -31,3 +42,4 @@ define(['backbone', 'https://cdn.socket.io/socket.io-1.4.5.js', 'models/user'], 
         }
     });
 });
+ 

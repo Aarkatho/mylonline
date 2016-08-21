@@ -4,24 +4,21 @@ define(['backbone', 'hgn!templates/pages/dashboard'], function (BB, dashboardTem
         className: 'page',
         initialize: function () {},
         render: function () {
-            var self = this;
             var deferred = BB.$.Deferred();
 
-            currentUser.fetch({
-                success: function (model, response, options) {
-                    console.log(response);
-                    var markup = dashboardTemplate({
-                        user: {}
-                    });
-
-                    self.$el.html(markup);
-                    self.$el.appendTo('#page-container');
-                    deferred.resolve();
-                },
-                error: function (model, response, options) {
-                    deferred.reject();
+            var markup = dashboardTemplate({
+                user: {
+                    userId: currentUser.get('id'),
+                    username: currentUser.get('username'),
+                    email: currentUser.get('email'),
+                    isAdmin: currentUser.get('isAdmin'),
+                    isBanned: currentUser.get('isBanned')
                 }
             });
+
+            this.$el.html(markup);
+            this.$el.appendTo('#page-container');
+            deferred.resolve();
 
             return deferred.promise();
         }

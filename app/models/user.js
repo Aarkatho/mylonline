@@ -7,8 +7,14 @@ var userSchema = new Schema({
     username: String,
     password: String,
     email: String,
-    isAdmin: Boolean,
-    isBanned: Boolean
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
+    isBanned: {
+        type: Boolean,
+        default: false
+    }
 });
 
 mongooseAutoIncrement.initialize(mongoose.connection);

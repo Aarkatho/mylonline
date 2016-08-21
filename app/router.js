@@ -86,7 +86,7 @@ router.post('/login', function (req, res) {
                 req.session.username = lowerCaseUsername;
                 res.status(200).json(user.userId);
             } else res.sendStatus(400);
-        } else res.sendStatus(400);
+        } else res.sendStatus(404);
     });
 });
 
@@ -107,6 +107,8 @@ router.get('/user/:userId', function (req, res) {
     } else res.sendStatus(400);
 });
 
+// tests
+
 router.get('/users', function (req, res) {
     User.find({}, function (err, users) {
         if(err) throw err;
@@ -114,5 +116,24 @@ router.get('/users', function (req, res) {
         res.status(200).json(users);
     });
 });
+
+router.put('/ban/:userId', function (req, res) {
+    if (validator.isInt(req.params.userId, {min: 1})) {
+        User.findOne({userId: req.params.userId}, function (err, user) {
+            if (err) throw err;
+
+            if (user) {
+                user.isBanned = !user.isBanned;
+                user.save(function (err) {
+                    if (err) throw err;
+
+                    res.status(200).json({isBanned: user.isBanned});
+                });
+            } else res.sendStatus(404);
+        });
+    } else res.sendStatus(400);
+});
+
+//
 
 module.exports = router;
