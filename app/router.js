@@ -91,35 +91,6 @@ router.post('/login', function (req, res) {
     });
 });
 
-var isLoggedIn = function (req, res, next) {
-    if (req.session && !req.session.isBanned) next();
-    else return res.sendStatus(401);
-};
-
-router.get('/user/:userId', isLoggedIn, function (req, res) {
-    if (validator.isInt(req.params.userId, {min: 1})) {
-        User.findOne({userId: req.params.userId}, function (err, user) {
-            if (err) throw err;
-
-            if (user) {
-                var data = {
-                    username: user.username,
-                    email: user.email
-                };
-
-                if (req.session.username === user.username) {
-                    _.extend(data, {
-                        isAdmin: user.isAdmin,
-                        isBanned: user.isBanned
-                    });
-                }
-
-                res.status(200).json(data);
-            } else res.sendStatus(404);
-        });
-    } else res.sendStatus(400);
-});
-
 // tests
 
 router.get('/users', function (req, res) {

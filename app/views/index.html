@@ -17,22 +17,15 @@
                     backbone: 'libs/backbone/backbone-min',
                     hgn: 'libs/require/plugins/hgn',
                     hogan: 'libs/hogan/hogan',
-                    jquery: 'libs/jquery/jquery-3.0.0.min',
+                    jquery: 'libs/jquery/jquery-3.1.0.min',
+                    'socket.io': 'libs/socket.io/socket.io-1.4.5',
                     text: 'libs/require/plugins/text',
                     underscore: 'libs/underscore/underscore-min'
                 }
             });
 
-            //
-            var currentUser;
-            requirejs(['models/user'], function (UserModel) {
-                currentUser = new UserModel();
-            });
-            //
-
-            requirejs(['jquery'], function ($) {
-                $.noConflict();
-                $(document).ready(function () {
+            requirejs(['backbone'], function (BB) {
+                BB.$(document).ready(function () {
                     requirejs(['apps/main']);
                 });
             });

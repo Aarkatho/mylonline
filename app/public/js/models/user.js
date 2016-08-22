@@ -3,6 +3,6 @@ define(['backbone'], function (BB) {
         defaults: {
             isLoggedIn: false
         },
-        urlRoot: '/user'
+        modelType: 'user'
     });
 });

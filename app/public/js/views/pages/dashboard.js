@@ -8,11 +8,11 @@ define(['backbone', 'hgn!templates/pages/dashboard'], function (BB, dashboardTem
 
             var markup = dashboardTemplate({
                 user: {
-                    userId: currentUser.get('id'),
-                    username: currentUser.get('username'),
-                    email: currentUser.get('email'),
-                    isAdmin: currentUser.get('isAdmin'),
-                    isBanned: currentUser.get('isBanned')
+                    userId: APPLICATION.user.get('id'),
+                    username: APPLICATION.user.get('username'),
+                    email: APPLICATION.user.get('email'),
+                    isAdmin: APPLICATION.user.get('isAdmin'),
+                    isBanned: APPLICATION.user.get('isBanned')
                 }
             });
 

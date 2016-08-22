@@ -1,12 +1,10 @@
-define(['backbone', 'https://cdn.socket.io/socket.io-1.4.5.js', 'models/user'], function (BB, io, UserModel) {
+define(['backbone'], function (BB) {
     return BB.View.extend({
         el: '#login-form',
         events: {
             'submit': 'login'
         },
-        initialize: function () {
-            var socket = io();
-        },
+        initialize: function () {},
         login: function (event) {
             event.preventDefault();
             var username = this.$('input[name="username"]').val();
@@ -18,13 +16,14 @@ define(['backbone', 'https://cdn.socket.io/socket.io-1.4.5.js', 'models/user'], 
             });
 
             $post.done(function (userId) {
-                currentUser.set({id: userId});
-                currentUser.fetch({
+                APPLICATION.user.set({id: userId});
+
+                APPLICATION.user.fetch({
                     success: function (model, response, options) {
                         alert(username + ', bienvenido a Myl Online.');
-                        currentUser.set({isLoggedIn: true});
+                        APPLICATION.user.set({isLoggedIn: true});
 
-                        response.isBanned ?
+                        response.data.isBanned ?
                             BB.history.navigate('banned', {trigger: true}) :
                             BB.history.navigate('dashboard', {trigger: true});
                     },
