@@ -12,11 +12,14 @@ define(['backbone'], function (BB) {
             var rpassword = this.$('input[name="rpassword"]').val();
             var email = this.$('input[name="email"]').val();
 
-            APPLICATION.socket.emit('auth:register', {
-                username: username,
-                password: password,
-                rpassword: rpassword,
-                email: email
+            APPLICATION.socket.emit('auth', {
+                action: 'register',
+                data: {
+                    username: username,
+                    password: password,
+                    rpassword: rpassword,
+                    email: email
+                }
             });
 
             APPLICATION.socket.once('auth:register', function (data) {

@@ -10,13 +10,16 @@ define(['backbone'], function (BB) {
             var username = this.$('input[name="username"]').val();
             var password = this.$('input[name="password"]').val();
 
-            APPLICATION.socket.emit('auth:login', {
-                username: username,
-                password: password
+            APPLICATION.socket.emit('auth', {
+                action: 'login',
+                data: {
+                    username: username,
+                    password: password
+                }
             });
 
             APPLICATION.socket.once('auth:login', function (data) {
-                console.log('auth once', data);
+                console.log(data);
                 if (data.success) {
                     APPLICATION.user.set({id: data.data.userId});
 
