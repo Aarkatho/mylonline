@@ -10,34 +10,31 @@ define(['backbone'], function (BB) {
             var username = this.$('input[name="username"]').val();
             var password = this.$('input[name="password"]').val();
 
-            var $post = BB.$.post('/login', {
+            APPLICATION.socket.emit('auth:login', {
                 username: username,
                 password: password
             });
 
-            $post.done(function (userId) {
-                APPLICATION.user.set({id: userId});
+            APPLICATION.socket.once('auth:login', function (data) {
+                console.log('auth once', data);
+                if (data.success) {
+                    APPLICATION.user.set({id: data.data.userId});
 
-                APPLICATION.user.fetch({
-                    success: function (model, response, options) {
-                        alert(username + ', bienvenido a Myl Online.');
-                        APPLICATION.user.set({isLoggedIn: true});
+                    APPLICATION.user.fetch({
+                        success: function (model, response, options) {
+                            alert(username + ', bienvenido a MyL Online (WS).');
+                            APPLICATION.user.set({isLoggedIn: true});
 
-                        response.data.isBanned ?
-                            BB.history.navigate('banned', {trigger: true}) :
-                            BB.history.navigate('dashboard', {trigger: true});
-                    },
-                    error: function (model, response, options) {
-                        alert('Ha ocurrido un error al intentar obtener los datos de tu cuenta.');
-                    }
-                });
+                            response.data.isBanned ?
+                                BB.history.navigate('banned', {trigger: true}) :
+                                BB.history.navigate('dashboard', {trigger: true});
+                        },
+                        error: function (model, response, options) {
+                            alert('Ha ocurrido un error al intentar obtener los datos de tu cuenta.');
+                        }
+                    });
+                } else alert('Error al iniciar sesión (errorType: ' + data.errorType + ')');
             });
-
-            $post.fail(function (data) {
-                console.log('fail!', data);
-            });
-
-            $post.always(function () {});
         }
     });
 });

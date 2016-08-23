@@ -14,7 +14,7 @@ define(['backbone', 'socket.io', 'router', 'models/user'], function (BB, SocketI
             case 'read':
                 APPLICATION.socket.emit('read', {modelType: model.modelType, modelId: model.id});
 
-                APPLICATION.socket.once('read:user', function (data) {
+                APPLICATION.socket.once('read:' + model.modelType, function (data) {
                     data.success ? options.success(data) : options.error(data);
                 });
 

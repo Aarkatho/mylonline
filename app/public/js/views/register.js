@@ -12,23 +12,19 @@ define(['backbone'], function (BB) {
             var rpassword = this.$('input[name="rpassword"]').val();
             var email = this.$('input[name="email"]').val();
 
-            var $post = BB.$.post('/user', {
+            APPLICATION.socket.emit('auth:register', {
                 username: username,
                 password: password,
                 rpassword: rpassword,
                 email: email
             });
 
-            $post.done(function () {
-                alert('Tu cuenta ha sido creada, ahora debes ingresar con ella.');
-                BB.history.navigate('auth/login', {trigger: true});
+            APPLICATION.socket.once('auth:register', function (data) {
+                if (data.success) {
+                    alert('Tu cuenta ha sido creada, ahora ingresa con ella (WS).');
+                    BB.history.navigate('auth/login', {trigger: true});
+                } else alert('Error al registrarse (errorType: ' + data.errorType + ')');
             });
-
-            $post.fail(function (data) {
-                console.log('fail!', data);
-            });
-
-            $post.always(function () {});
         }
     });
 });

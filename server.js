@@ -45,35 +45,131 @@ app.use('/', router);
 // Socket.IO
 
 io.on('connection', function (socket) {
+    // auth
+
+    socket.on('auth:register', function (data) {
+        var usernameValidationError;
+        var passwordValidationError;
+        var rpasswordValidationError;
+        var emailValidationError;
+
+        !validator.isAlphanumeric(data.username) || !validator.isLength(data.username, {min: 4, max: 16}) ?
+            usernameValidationError = true : usernameValidationError = false;
+
+        !validator.isAlphanumeric(data.password) || !validator.isLength(data.password, {min: 3, max: 16}) ?
+            passwordValidationError = true : passwordValidationError = false;
+
+        !validator.equals(data.password, data.rpassword) ?
+            rpasswordValidationError = true : rpasswordValidationError = false;
+
+        !validator.isEmail(data.email) ?
+            emailValidationError = true : emailValidationError = false;
+
+        if (usernameValidationError || passwordValidationError || rpasswordValidationError || emailValidationError) {
+            socket.emit('auth:register', {
+                success: false,
+                errorType: 'Bad request',
+                errors: {
+                    usernameValidationError: usernameValidationError,
+                    passwordValidationError: passwordValidationError,
+                    rpasswordValidationError: rpasswordValidationError,
+                    emailValidationError: emailValidationError
+                }
+            });
+        } else {
+            var username = data.username.toLowerCase();
+            var email = data.email.toLowerCase();
+
+            User.find({$or: [{username: username}, {email: email}]}, function (err, users) {
+                if (err) throw err;
+                var usernameExists;
+                var emailExists;
+                _.findWhere(users, {username: username}) ? usernameExists = true : usernameExists = false;
+                _.findWhere(users, {email: email}) ? emailExists = true : emailExists = false;
+
+                if (usernameExists || emailExists) {
+                    socket.emit('auth:register', {
+                        success: false,
+                        errorType: 'Conflict',
+                        erros: {
+                            usernameExists: usernameExists,
+                            emailExists: emailExists
+                        }
+                    });
+                } else {
+                    var usr = new User({
+                        username: username,
+                        password: data.password,
+                        email: email
+                    });
+
+                    usr.save(function (err) {
+                        if (err) throw err;
+
+                        socket.emit('auth:register', {success: true});
+                    });
+                }
+            });
+        }
+    });
+
+    socket.on('auth:login', function (data) {
+        var username = data.username.toLowerCase();
+
+        User.findOne({username: username}, function (err, user) {
+            if (err) throw err;
+
+            if (user) {
+                if (data.password === user.password) {
+                    socket.request.session.user = {};
+                    socket.request.session.user.userId = user.userId;
+                    socket.request.session.user.isAdmin = user.isAdmin;
+                    socket.request.session.user.isBanned = user.isBanned;
+                    socket.emit('auth:login', {success: true, data: {userId: user.userId}});
+                } else socket.emit('auth:login', {success: false, errorType: 'Bad request'});
+            } else socket.emit('auth:login', {success: false, errorType: 'Not found'});
+        });
+    });
+
+    // Backbone.js CRUD
+
+    socket.on('create', function (data) {});
+
     socket.on('read', function (data) {
         var modelId = data.modelId.toString();
 
         switch (data.modelType) {
             case 'user':
-                if (validator.isInt(modelId, {min: 1})) {
-                    User.findOne({userId: modelId}, function (err, user) {
-                        if (err) throw err;
+                if (socket.request.session.user) {
+                    if (validator.isInt(modelId, {min: 1})) {
+                        User.findOne({userId: modelId}, function (err, user) {
+                            if (err) throw err;
 
-                        if (user) {
-                            var modelData = {
-                                username: user.username,
-                                email: user.email
-                            };
+                            if (user) {
+                                var modelData = {
+                                    username: user.username,
+                                    email: user.email
+                                };
 
-                            if (socket.request.session.username === user.username) {
-                                _.extend(modelData, {
-                                    isAdmin: user.isAdmin,
-                                    isBanned: user.isBanned
-                                });
-                            }
+                                if (socket.request.session.user.userId === user.userId) {
+                                    _.extend(modelData, {
+                                        isAdmin: user.isAdmin,
+                                        isBanned: user.isBanned
+                                    });
+                                }
 
-                            socket.emit('read:user', {success: true, data: modelData});
-                        } else socket.emit('read:user', {success: false});
-                    });
-                } else socket.emit('read:user', {success: false});
+                                socket.emit('read:user', {success: true, data: modelData});
+                            } else socket.emit('read:user', {success: false, errorType: 'Not found'});
+                        });
+                    } else socket.emit('read:user', {success: false, errorType: 'Bad request'});
+                } else socket.emit('read:user', {success: false, errorType: 'Unauthorized'});
                 break;
         }
     });
+
+    socket.on('update', function (data) {});
+
+    socket.on('delete', function (data) {});
 });
 
 // Conectamos la base de datos
