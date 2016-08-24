@@ -1,8 +1,18 @@
-define(['backbone', 'hgn!templates/pages/dashboard'], function (BB, dashboardTemplate) {
+define(['backbone', 'hgn!templates/pages/dashboard', 'backbone.stickit'], function (BB, dashboardTemplate) {
     return BB.View.extend({
         id: 'dashboard',
         className: 'page',
-        initialize: function () {},
+        bindings: {
+            '#test': {
+                observe: 'isBanned',
+                update: function ($el, val, model, options) {
+                    $el.html('isBanned: ' + val);
+                }
+            }
+        },
+        initialize: function () {
+            console.log(this.$('#test'));
+        },
         render: function () {
             var deferred = BB.$.Deferred();
 
@@ -20,6 +30,7 @@ define(['backbone', 'hgn!templates/pages/dashboard'], function (BB, dashboardTem
             this.$el.appendTo('#page-container');
             deferred.resolve();
 
+            this.stickit(APPLICATION.user);
             return deferred.promise();
         }
     });

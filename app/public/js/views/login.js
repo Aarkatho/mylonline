@@ -19,7 +19,6 @@ define(['backbone'], function (BB) {
             });
 
             APPLICATION.socket.once('auth:login', function (data) {
-                console.log(data);
                 if (data.success) {
                     APPLICATION.user.set({id: data.data.userId});
 

@@ -1,6 +1,6 @@
-define(['backbone', 'socket.io', 'router', 'models/user'], function (BB, SocketIO, router, UserModel) {
+define(['backbone', 'socket.io', 'router', 'models/user'], function (BB, io, router, UserModel) {
     window.APPLICATION = {};
-    APPLICATION.socket = SocketIO();
+    APPLICATION.socket = io();
     APPLICATION.user = new UserModel();
 
     BB.Model.prototype.parse = function (resp, options) {
@@ -25,4 +25,10 @@ define(['backbone', 'socket.io', 'router', 'models/user'], function (BB, SocketI
                 break;
         }
     };
+
+    // for test
+
+    APPLICATION.socket.on('admin_action:banmyself', function (data) {
+        APPLICATION.user.fetch();
+    });
 });
