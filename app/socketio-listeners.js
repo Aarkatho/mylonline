@@ -3,10 +3,14 @@ var userActionsHandler = require('./socketio-handlers/user-actions');
 var adminActionsHandler = require('./socketio-handlers/admin-actions');
 var readHandler = require('./socketio-handlers/read');
 
+var users = [];
+
 module.exports.initialize = function (io) {
     io.on('connection', function (socket) {
+        socket.on('disconnect', function () {});
+
         socket.on('auth', function (data) {
-            authHandler(socket, data);
+            authHandler(io, socket, data);
         });
 
         socket.on('user_action', function (data) {
@@ -14,16 +18,11 @@ module.exports.initialize = function (io) {
         });
 
         socket.on('admin_action', function (data) {
-            adminActionsHandler(socket, data);
+            adminActionsHandler(io, socket, data);
         });
-
-        socket.on('create', function (data) {});
 
         socket.on('read', function (data) {
             readHandler(socket, data);
         });
-
-        socket.on('update', function (data) {});
-        socket.on('delete', function (data) {});
     });
 };

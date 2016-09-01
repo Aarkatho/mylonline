@@ -1,15 +1,49 @@
+var validator = require('validator');
+
 var User = require('../models/user');
 
-module.exports = function (socket, data) {
-    var event = 'admin_action:' + data.action;
-
+module.exports = function (io, socket, data) {
+    console.log(io.socket.id);
     if (socket.request.session.user) {
-        if (!socket.request.session.user.isAdmin) {
+        if (socket.request.session.user.isAdmin) {
             switch (data.action) {
                 case 'ban':
+                    var tUserId = data.data.tUserId.toString();
+
+                    if (validator.isInt(tUserId, {min: 1})) {
+                        User.findOne({userId: tUserId}, function (err, user) {
+                            if (err) throw err;
+
+                            if (user) {
+                                user.isBanned = true;
+
+                                user.save(function (err) {
+                                    if (err) throw err;
+                                    socket.emit('admin_action', {success: true});
+                                });
+                            } else socket.emit('admin_action', {success: false, errorType: 'Not found'});
+                        });
+                    } else socket.emit('admin_action', {success: false, errorType: 'Bad request'});
+
                     break;
 
                 case 'unban':
+                    var tUserId = data.data.tUserId.toString();
+
+                    if (validator.isInt(tUserId, {min: 1})) {
+                        User.findOne({userId: tUserId}, function (err, user) {
+                            if (err) throw err;
+
+                            if (user) {
+                                user.isBanned = false;
+
+                                user.save(function (err) {
+                                    if (err) throw err;
+                                    socket.emit('admin_action', {success: true});
+                                });
+                            } else socket.emit('admin_action', {success: false, errorType: 'Not found'});
+                        });
+                    } else socket.emit('admin_action', {success: false, errorType: 'Bad request'});
                     break;
 
                 case 'warn':
@@ -17,21 +51,7 @@ module.exports = function (socket, data) {
 
                 case 'announce':
                     break;
-
-                case 'banmyself':
-                    User.findOne({userId: socket.request.session.user.userId}, function (err, user) {
-                        if (err) throw err;
-
-                        if (user) {
-                            user.isBanned = !user.isBanned;
-
-                            user.save(function (err) {
-                                if (err) throw err;
-                                socket.emit(event);
-                            });
-                        } else socket.emit(event, {success: false});
-                    });
             }
-        } else socket.emit(event, {success: false, errorType: 'Forbidden'});
-    } else socket.emit(event, {success: false, errorType: 'Unauthorized'});
+        } else socket.emit('admin_action', {success: false, errorType: 'Forbidden'});
+    } else socket.emit('admin_action', {success: false, errorType: 'Unauthorized'});
 };

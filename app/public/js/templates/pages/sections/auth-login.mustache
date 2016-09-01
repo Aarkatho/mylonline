@@ -1,13 +1,35 @@
-<p>Estás en la sección "auth-login"</p>
-<br>
-<form id="login-form" action="/login" method="post">
-    <input type="text" name="username" placeholder="Nombre de usuario" value="test1">
-    <br>
-    <br>
-    <input type="password" name="password" placeholder="Contraseña" value="123">
-    <br>
-    <br>
-    <input type="submit" value="Iniciar sesión">
+<div class="s15px"></div>
+<h1>INICIAR SESIÓN</h1>
+<div class="s15px"></div>
+<div class="auth-separator"></div>
+<div class="s15px"></div>
+<form id="login-form">
+    <div class="auth-input-container">
+        <p>Nombre de usuario</p>
+        <div class="s10px"></div>
+        <input type="text" name="username">
+    </div>
+    <div class="s15px"></div>
+    <div class="auth-input-container">
+        <p>Contraseña</p>
+        <div class="s10px"></div>
+        <input type="password" name="password">
+    </div>
+    <div class="s15px"></div>
+    <input class="button" type="submit" value="Confirmar">
 </form>
-<br>
-<a href="#auth/register">Ir a la sección "auth-register"</a>
+<div class="s15px"></div>
+<p class="centered-text">
+    <a href="#auth/forgot-username">¿Olvidaste tu nombre de usuario?</a>
+</p>
+<div class="s10px"></div>
+<p class="centered-text">
+    <a href="#auth/forgot-password">¿Olvidaste la contraseña?</a>
+</p>
+<div class="s15px"></div>
+<div class="auth-separator"></div>
+<div class="s15px"></div>
+<p class="auth-text">¿No tienes una cuenta?</p>
+<div class="s10px"></div>
+<a class="button" href="#auth/register">Regístrate</a>
+<div class="s15px"></div>

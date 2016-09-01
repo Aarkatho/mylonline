@@ -27,6 +27,7 @@ define(['backbone'], function (BB) {
                         pageView.render().then(
                             function () {
                                 requirejs(['apps/' + pageName], function (pageApp) {
+                                    pageView.$el.show();
                                     pageApp.initialize();
 
                                     self.currentPage = {
@@ -35,7 +36,6 @@ define(['backbone'], function (BB) {
                                         subViews: pageApp.views
                                     };
 
-                                    pageView.$el.show();
                                     BB.$('#page-loader').fadeOut();
                                     if (callback) callback();
                                 });
@@ -66,16 +66,16 @@ define(['backbone'], function (BB) {
                                     sectionView.render().then(
                                         function () {
                                             requirejs(['apps/' + pageName + '-' + sectionName], function (sectionApp) {
-                                                sectionApp.initialize();
-
-                                                self.currentPageSection = {
-                                                    name: sectionName,
-                                                    view: sectionView,
-                                                    subViews: sectionApp.views
-                                                };
-
                                                 BB.$('#section-loader').fadeOut('fast', function () {
-                                                    sectionView.$el.fadeIn('fast');
+                                                    sectionView.$el.fadeIn('fast', function () {
+                                                        sectionApp.initialize();
+
+                                                        self.currentPageSection = {
+                                                            name: sectionName,
+                                                            view: sectionView,
+                                                            subViews: sectionApp.views
+                                                        };
+                                                    });
                                                 });
                                             });
                                         },

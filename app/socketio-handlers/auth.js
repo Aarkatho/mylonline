@@ -3,7 +3,9 @@ var _ = require('underscore');
 
 var User = require('../models/user');
 
-module.exports = function (socket, data) {
+var users = [];
+
+module.exports = function (io, socket, data) {
     var event = 'auth:' + data.action;
 
     switch (data.action) {
@@ -15,11 +17,18 @@ module.exports = function (socket, data) {
 
                 if (user) {
                     if (data.data.password === user.password) {
-                        socket.request.session.user = {};
-                        socket.request.session.user.userId = user.userId;
-                        socket.request.session.user.isAdmin = user.isAdmin;
-                        socket.request.session.user.isBanned = user.isBanned;
-                        socket.emit(event, {success: true, data: {userId: user.userId}});
+                        if (user.isBanned) {
+                            socket.emit(event, {success: false, errorType: 'Forbidden'});
+                            socket.disconnect();
+                        } else {
+                            socket.request.session.user = {};
+                            socket.request.session.user.userId = user.userId;
+                            socket.request.session.user.isAdmin = user.isAdmin;
+                            socket.request.session.user.isBanned = user.isBanned;
+                            socket.emit(event, {success: true, data: {userId: user.userId}});
+                            users.push(user.username);
+                            io.emit('update', users);
+                        }
                     } else socket.emit(event, {success: false, errorType: 'Bad request'});
                 } else socket.emit(event, {success: false, errorType: 'Not found'});
             });
@@ -70,19 +79,19 @@ module.exports = function (socket, data) {
                         socket.emit(event, {
                             success: false,
                             errorType: 'Conflict',
-                            erros: {
+                            errors: {
                                 usernameExists: usernameExists,
                                 emailExists: emailExists
                             }
                         });
                     } else {
-                        var _user = new User({
+                        var user = new User({
                             username: username,
                             password: data.data.password,
                             email: email
                         });
 
-                        _user.save(function (err) {
+                        user.save(function (err) {
                             if (err) throw err;
 
                             socket.emit(event, {success: true});

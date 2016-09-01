@@ -1,19 +1,39 @@
-<p>Estás en la sección "auth-register"</p>
-<br>
-<form id="register-form" action="/user" method="post">
-    <input type="text" name="username" placeholder="Nombre de usuario">
-    <br>
-    <br>
-    <input type="password" name="password" placeholder="Contraseña">
-    <br>
-    <br>
-    <input type="password" name="rpassword" placeholder="Confirma tu contraseña">
-    <br>
-    <br>
-    <input type="text" name="email" placeholder="Correo electrónico">
-    <br>
-    <br>
-    <input type="submit" value="Crear cuenta">
+<div class="s15px"></div>
+<h1>REGISTRARTE</h1>
+<div class="s15px"></div>
+<div class="auth-separator"></div>
+<div class="s15px"></div>
+<form id="register-form">
+    <div class="auth-input-container">
+        <p>Nombre de usuario</p>
+        <div class="s10px"></div>
+        <input type="text" name="username">
+    </div>
+    <div class="s15px"></div>
+    <div class="auth-input-container">
+        <p>Contraseña</p>
+        <div class="s10px"></div>
+        <input type="password" name="password">
+    </div>
+    <div class="s15px"></div>
+    <div class="auth-input-container">
+        <p>Confirma tu contraseña</p>
+        <div class="s10px"></div>
+        <input type="password" name="rpassword">
+    </div>
+    <div class="s15px"></div>
+    <div class="auth-input-container">
+        <p>Correo electrónico</p>
+        <div class="s10px"></div>
+        <input type="text" name="email">
+    </div>
+    <div class="s15px"></div>
+    <input class="button" type="submit" value="Confirmar">
 </form>
-<br>
-<a href="#auth/login">Ir a la sección "auth-login"</a>
+<div class="s15px"></div>
+<div class="auth-separator"></div>
+<div class="s15px"></div>
+<p class="auth-text">¿Ya tienes una cuenta?</p>
+<div class="s10px"></div>
+<a class="button" href="#auth/login">Inicia sesión</a>
+<div class="s15px"></div>

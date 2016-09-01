@@ -4,13 +4,15 @@ define(['backbone'], function (BB) {
         events: {
             'submit': 'login'
         },
-        initialize: function () {},
+        initialize: function () {
+            this.$('input[name="username"]').focus();
+        },
         login: function (event) {
             event.preventDefault();
             var username = this.$('input[name="username"]').val();
             var password = this.$('input[name="password"]').val();
 
-            APPLICATION.socket.emit('auth', {
+            APP.socket.emit('auth', {
                 action: 'login',
                 data: {
                     username: username,
@@ -18,24 +20,26 @@ define(['backbone'], function (BB) {
                 }
             });
 
-            APPLICATION.socket.once('auth:login', function (data) {
+            APP.socket.once('auth:login', function (data) {
                 if (data.success) {
-                    APPLICATION.user.set({id: data.data.userId});
+                    APP.user.set({id: data.data.userId});
 
-                    APPLICATION.user.fetch({
+                    APP.user.fetch({
                         success: function (model, response, options) {
                             alert(username + ', bienvenido a MyL Online (WS).');
-                            APPLICATION.user.set({isLoggedIn: true});
-
-                            response.data.isBanned ?
-                                BB.history.navigate('banned', {trigger: true}) :
-                                BB.history.navigate('dashboard', {trigger: true});
+                            APP.user.set({isLoggedIn: true});
+                            BB.history.navigate('dashboard', {trigger: true});
                         },
                         error: function (model, response, options) {
                             alert('Ha ocurrido un error al intentar obtener los datos de tu cuenta.');
                         }
                     });
-                } else alert('Error al iniciar sesión (errorType: ' + data.errorType + ')');
+                } else {
+                    if (data.errorType === 'Forbidden') {
+                        alert('Tu cuenta esta banneada.');
+                        BB.history.navigate('banned', {trigger: true});
+                    } else alert('Error (errorType: ' + data.errorType + ')');
+                }
             });
         }
     });

@@ -10,27 +10,24 @@ define(['backbone', 'hgn!templates/pages/dashboard', 'backbone.stickit'], functi
                 }
             }
         },
-        initialize: function () {
-            console.log(this.$('#test'));
-        },
+        initialize: function () {},
         render: function () {
             var deferred = BB.$.Deferred();
 
             var markup = dashboardTemplate({
                 user: {
-                    userId: APPLICATION.user.get('id'),
-                    username: APPLICATION.user.get('username'),
-                    email: APPLICATION.user.get('email'),
-                    isAdmin: APPLICATION.user.get('isAdmin'),
-                    isBanned: APPLICATION.user.get('isBanned')
+                    userId: APP.user.get('id'),
+                    username: APP.user.get('username'),
+                    email: APP.user.get('email'),
+                    isAdmin: APP.user.get('isAdmin'),
+                    isBanned: APP.user.get('isBanned')
                 }
             });
 
             this.$el.html(markup);
+            this.stickit(APP.user);
             this.$el.appendTo('#page-container');
             deferred.resolve();
-
-            this.stickit(APPLICATION.user);
             return deferred.promise();
         }
     });

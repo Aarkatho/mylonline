@@ -1,7 +1,7 @@
 define(['backbone', 'jquery', 'hgn!templates/pages/sections/auth-login'], function (BB, $, authLoginTemplate) {
     return BB.View.extend({
         id: 'auth-login',
-        className: 'section',
+        className: 'auth-section section',
         initialize: function () {},
         render: function () {
             var deferred = BB.$.Deferred();
