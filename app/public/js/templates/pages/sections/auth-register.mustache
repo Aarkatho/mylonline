@@ -4,28 +4,34 @@
 <div class="auth-separator"></div>
 <div class="s15px"></div>
 <form id="register-form">
-    <div class="auth-input-container">
+    <div id="username-input" class="auth-input-container">
         <p>Nombre de usuario</p>
         <div class="s10px"></div>
         <input type="text" name="username">
+        <p class="bad-request-error">Corrige el nombre de usuario</p>
+        <p class="conflict-error">Nombre de usuario no disponible</p>
     </div>
     <div class="s15px"></div>
-    <div class="auth-input-container">
+    <div id="password-input" class="auth-input-container">
         <p>Contraseña</p>
         <div class="s10px"></div>
         <input type="password" name="password">
+        <p class="bad-request-error">Corrige la contraseña</p>
     </div>
     <div class="s15px"></div>
-    <div class="auth-input-container">
+    <div id="rpassword-input" class="auth-input-container">
         <p>Confirma tu contraseña</p>
         <div class="s10px"></div>
         <input type="password" name="rpassword">
+        <p class="bad-request-error">Las contraseñas no coinciden</p>
     </div>
     <div class="s15px"></div>
-    <div class="auth-input-container">
+    <div id="email-input" class="auth-input-container">
         <p>Correo electrónico</p>
         <div class="s10px"></div>
         <input type="text" name="email">
+        <p class="bad-request-error">La dirección de correo electrónico no es válida</p>
+        <p class="conflict-error">Correo electrónico no disponible</p>
     </div>
     <div class="s15px"></div>
     <input class="button" type="submit" value="Confirmar">

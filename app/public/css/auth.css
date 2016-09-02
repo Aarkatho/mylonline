@@ -1,6 +1,4 @@
-#auth {
-    background-color: rgb(220, 220, 220);
-}
+#auth {}
 
 #auth-section-container {
     background-color: rgb(220, 220, 220);
@@ -61,4 +59,11 @@
 
 .auth-input-container > input:focus {
     background-color: rgb(240, 240, 240);
+}
+
+.bad-request-error, .conflict-error {
+    color: brown !important;
+    display: none;
+    font-size: 12px !important;
+    margin-top: 5px;
 }

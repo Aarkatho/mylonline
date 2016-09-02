@@ -2,8 +2,7 @@ define(['backbone'], function (BB) {
     return BB.View.extend({
         el: '#register-form',
         events: {
-            'submit': 'register',
-            'focusin input': 'hideError'
+            'submit': 'register'
         },
         initialize: function () {
             this.$('input[name="username"]').focus();
@@ -37,16 +36,14 @@ define(['backbone'], function (BB) {
             });
         },
         showBadRequestErrors: function (errors) {
-            if (errors.usernameValidationError) this.$('#').show();
-            if (errors.passwordValidationError) this.$('#').show();
-            if (errors.rpasswordValidationError) this.$('#').show();
-            if (errors.emailValidationError) this.$('#').show();
+            if (errors.usernameValidationError) this.$('#username-input > p.bad-request-error').show();
+            if (errors.passwordValidationError) this.$('#password-input > p.bad-request-error').show();
+            if (errors.rpasswordValidationError) this.$('#rpassword-input > p.bad-request-error').show();
+            if (errors.emailValidationError) this.$('#email-input > p.bad-request-error').show();
         },
         showConflictErrors: function (errors) {
-            if (errors.usernameExists) this.$('#').show();
-            if (errors.emailExists) this.$('#').show();
-        },
-        hideError: function (event) {
+            if (errors.usernameExists) this.$('#username-input > p.conflict-error').show();
+            if (errors.emailExists) this.$('#email-input > p.conflict-error').show();
         }
     });
 });
