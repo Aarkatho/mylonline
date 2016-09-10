@@ -1,1 +1,10 @@
 #auth-login {}
+
+#login-form > p {
+    color: brown;
+    font-family: sans-serif;
+    font-size: 12px;
+    margin-bottom: 15px;
+    text-align: center;
+    display: none;
+}

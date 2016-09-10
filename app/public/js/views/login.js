@@ -20,25 +20,24 @@ define(['backbone'], function (BB) {
                 }
             });
 
-            APP.socket.once('auth:login', function (data) {
-                if (data.success) {
-                    APP.user.set({id: data.data.userId});
+            var self = this;
+
+            APP.socket.once('auth:login', function (response) {
+                if (response.success) {
+                    APP.user.set({id: response.data.userId});
 
                     APP.user.fetch({
-                        success: function (model, response, options) {
-                            alert(username + ', bienvenido a MyL Online (WS).');
+                        success: function (model, res, options) {
                             APP.user.set({isLoggedIn: true});
                             BB.history.navigate('dashboard', {trigger: true});
                         },
-                        error: function (model, response, options) {
-                            alert('Ha ocurrido un error al intentar obtener los datos de tu cuenta.');
+                        error: function (model, res, options) {
+                            self.$('.wtf').show();
                         }
                     });
                 } else {
-                    if (data.errorType === 'Forbidden') {
-                        alert('Tu cuenta esta banneada.');
-                        BB.history.navigate('banned', {trigger: true});
-                    } else alert('Error (errorType: ' + data.errorType + ')');
+                    if (response.errorType === 'Forbidden') BB.history.navigate('banned', {trigger: true});
+                    else self.$('.error').show();
                 }
             });
         }
