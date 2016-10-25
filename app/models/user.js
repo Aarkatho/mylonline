@@ -7,6 +7,10 @@ var userSchema = new Schema({
     username: String,
     password: String,
     email: String,
+    isRoot: {
+        type: Boolean,
+        default: false
+    },
     isAdmin: {
         type: Boolean,
         default: false

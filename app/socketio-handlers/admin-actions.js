@@ -3,7 +3,6 @@ var validator = require('validator');
 var User = require('../models/user');
 
 module.exports = function (io, socket, data) {
-    console.log(io.socket.id);
     if (socket.request.session.user) {
         if (socket.request.session.user.isAdmin) {
             switch (data.action) {

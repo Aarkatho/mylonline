@@ -2,7 +2,7 @@
   "name": "mylonline",
   "version": "0.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,7 +11,6 @@
   "dependencies": {
     "express": "~4.14.0",
     "morgan": "~1.7.0",
-    "body-parser": "~1.15.2",
     "mongoose": "~4.5.9",
     "hogan-express": "~0.5.2",
     "socket.io": "~1.4.8",

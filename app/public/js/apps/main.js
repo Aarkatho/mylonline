@@ -28,8 +28,8 @@ define(['backbone', 'socket.io', 'router', 'models/user'], function (BB, io, rou
 
     // for test
 
-    APP.socket.on('admin_action', function (data) {
-        APP.user.fetch();
+    APP.socket.on('administrator action', function (data) {
+        console.log(data);
     });
 
     APP.socket.on('update', function (data) {
