@@ -4,6 +4,7 @@ var mongooseAutoIncrement = require('mongoose-auto-increment');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
+    standarizedUsername: String,
     username: String,
     password: String,
     email: String,
@@ -11,7 +12,7 @@ var userSchema = new Schema({
         type: Boolean,
         default: false
     },
-    isAdmin: {
+    isAdministrator: {
         type: Boolean,
         default: false
     },

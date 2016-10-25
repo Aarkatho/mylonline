@@ -16,11 +16,11 @@ define(['backbone', 'hgn!templates/pages/dashboard', 'backbone.stickit'], functi
 
             var markup = dashboardTemplate({
                 user: {
-                    userId: APP.user.get('id'),
+                    userId: APP.user.get('userId'),
                     username: APP.user.get('username'),
                     email: APP.user.get('email'),
-                    isAdmin: APP.user.get('isAdmin'),
-                    isBanned: APP.user.get('isBanned')
+                    isRoot: APP.user.get('isRoot'),
+                    isAdministrator: APP.user.get('isAdministrator'),
                 }
             });
 

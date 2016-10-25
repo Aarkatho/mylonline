@@ -5,9 +5,11 @@ var hoganExpress = require('hogan-express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var expressSession = require('express-session');
+var Promise = require('bluebird');
 
 var router = require('./app/router');
 var socketIoListeners = require('./app/socketio-listeners');
+var User = require('./app/models/user');
 
 var app = express();
 var server = http.Server(app);
@@ -34,11 +36,36 @@ io.use(function (socket, next) {
 
 socketIoListeners.initialize(io);
 
-mongoose.connect('mongodb://test1:123@jello.modulusmongo.net:27017/guP9ybud', function (err) {
-    if (err) throw err;
-    var port = process.env.PORT || 1234;
+mongoose.Promise = Promise;
 
-    server.listen(port, function () {
-        console.log('server listening on port ' + port);
+mongoose.connect('mongodb://test:123@jello.modulusmongo.net:27017/yqeguW4i', function (err) {
+    if (err) throw err;
+
+    User.findOne({standarizedUsername: 'root'}, function (err, user) {
+        new Promise(function (resolve, reject) {
+            if (err) throw err;
+
+            if (user) resolve();
+            else {
+                user = new User({
+                    standarizedUsername: 'root',
+                    username: 'Root',
+                    password: '0208212mc',
+                    email: 'root.mylonline@gmail.com',
+                    isRoot: true
+                });
+
+                user.save(function (err) {
+                    if (err) throw err;
+                    resolve();
+                });
+            }
+        }).then(function () {
+            var port = process.env.PORT || 1234;
+
+            server.listen(port, function () {
+                console.log('server listening on port ' + port);
+            });
+        });
     });
 });

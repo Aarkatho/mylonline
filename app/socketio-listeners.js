@@ -198,5 +198,75 @@ module.exports.initialize = function (io) {
                 });
             }
         });
+
+        socket.on('user action', function (action, data) {
+            if (socket.request.session.user) {
+                switch (action) {
+                    case 'block':
+                        break;
+                    case 'add friend':
+                        break;
+                    case 'remove friend':
+                        break;
+                }
+            } else {
+                socket.emit('user action', {
+                    success: false,
+                    errorMessage: 'Debes iniciar sesión para llevar a cabo esta acción'
+                });
+            }
+        });
+
+        socket.on('anonymous action', function (action, data) {
+            switch (action) {
+                case 'login':
+                    var standarizedUsername = data.username.toLowerCase();
+
+                    User.findOne({standarizedUsername: standarizedUsername}, function (err, user) {
+                        if (err) throw err;
+
+                        if (user) {
+                            if (data.password === user.password) {
+                                if (user.isBanned) {
+                                    socket.emit('anonymous action', {
+                                        success: false,
+                                        errorMessage: 'Tu cuenta está baneada'
+                                    });
+                                } else {
+                                    socket.request.session.user = {
+                                        userId: user.userId,
+                                        isRoot: user.isRoot,
+                                        isAdministrator: user.isAdministrator
+                                    };
+
+                                    socket.emit('anonymous action', {
+                                        success: true,
+                                        data: {
+                                            userId: user.userId,
+                                            username: user.username,
+                                            email: user.email,
+                                            isRoot: user.isRoot,
+                                            isAdministrator: user.isAdministrator
+                                        }
+                                    });
+                                }
+                            } else {
+                                socket.emit('anonymous action', {
+                                    success: false,
+                                    errorMessage: 'Contraseña incorrecta'
+                                });
+                            }
+                        } else {
+                            socket.emit('anonymous action', {
+                                success: false,
+                                errorMessage: 'No existe una cuenta con el nombre de usuario que has ingresado'
+                            });
+                        }
+                    });
+                    break;
+                case 'register':
+                    break;
+            }
+        });
     });
 };
