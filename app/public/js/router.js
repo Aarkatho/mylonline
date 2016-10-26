@@ -2,8 +2,7 @@ define(['backbone'], function (BB) {
     var Router = BB.Router.extend({
         routes: {
             'auth(/:section)': 'auth',
-            'dashboard(/:section)': 'dashboard',
-            'banned': 'banned'
+            'dashboard(/:section)': 'dashboard'
         },
         pageManager: {
             currentPage: null,
@@ -122,9 +121,6 @@ define(['backbone'], function (BB) {
                     BB.history.navigate('dashboard/start', {trigger: true});
                 });
             }
-        },
-        banned: function () {
-            this.pageManager.switchPage('banned');
         }
     });
 

@@ -28,11 +28,31 @@ define(['backbone', 'socket.io', 'router', 'models/user'], function (BB, io, rou
 
     // for test
 
+    APP.socket.on('disconnect', function () {
+        alert('Has sido desconectado del servidor');
+    });
+
+    APP.socket.on('root action', function (data) {
+        console.log(data);
+    });
+
     APP.socket.on('administrator action', function (data) {
         console.log(data);
     });
 
-    APP.socket.on('update', function (data) {
+    APP.socket.on('user action', function (data) {
         console.log(data);
+    });
+
+    APP.socket.on('anonymous action', function (data) {
+        console.log(data);
+    });
+
+    APP.socket.on('application action', function (action, data) {
+        switch (action) {
+            case 'update users':
+                console.log('users list updated', data);
+                break;
+        }
     });
 });

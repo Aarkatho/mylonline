@@ -5,7 +5,7 @@ var hoganExpress = require('hogan-express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var expressSession = require('express-session');
-var Promise = require('bluebird');
+var bluebird = require('bluebird');
 
 var router = require('./app/router');
 var socketIoListeners = require('./app/socketio-listeners');
@@ -36,7 +36,7 @@ io.use(function (socket, next) {
 
 socketIoListeners.initialize(io);
 
-mongoose.Promise = Promise;
+mongoose.Promise = bluebird;
 
 mongoose.connect('mongodb://test:123@jello.modulusmongo.net:27017/yqeguW4i', function (err) {
     if (err) throw err;

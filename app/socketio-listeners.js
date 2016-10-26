@@ -1,9 +1,14 @@
 var validator = require('validator');
+var underscore = require('underscore');
 
 var User = require('./models/user');
 
 module.exports.initialize = function (io) {
     io.on('connection', function (socket) {
+        socket.on('disconnect', function () {
+            if (socket.request.session.user) users.remove(socket.request.session.user.userId);
+        });
+
         socket.on('root action', function (action, data) {
             if (socket.request.session.user) {
                 if (socket.request.session.user.isRoot) {
@@ -101,6 +106,7 @@ module.exports.initialize = function (io) {
 
                                                 user.save(function (err) {
                                                     if (err) throw err;
+                                                    if (users.isConnected(user.userId)) users.get(user.userId).socket.disconnect();
 
                                                     socket.emit('administrator action', {
                                                         success: true,
@@ -233,6 +239,15 @@ module.exports.initialize = function (io) {
                                         errorMessage: 'Tu cuenta está baneada'
                                     });
                                 } else {
+                                    if (users.isConnected(user.userId)) users.get(user.userId).socket.disconnect();
+                                    socket.join('users');
+
+                                    users.add({
+                                        userId: user.userId,
+                                        username: user.username,
+                                        socket: socket
+                                    });
+
                                     socket.request.session.user = {
                                         userId: user.userId,
                                         isRoot: user.isRoot,
@@ -263,10 +278,33 @@ module.exports.initialize = function (io) {
                             });
                         }
                     });
+
                     break;
                 case 'register':
                     break;
             }
         });
     });
+
+    var users = {
+        list: [],
+        add: function (user) {
+            this.list.push(user);
+            io.to('users').emit('application action', 'update users', this.getAll());
+        },
+        get: function (userId) {
+            return underscore.findWhere(this.list, {userId: userId});
+        },
+        getAll: function () {
+            return underscore.map(this.list, function (user) {
+                return underscore.omit(user, 'socket');
+            });
+        },
+        isConnected: function (userId) {
+            return underscore.findIndex(this.list, {userId: userId}) !== -1 ? true : false;
+        },
+        remove: function (userId) {
+            this.list.splice(underscore.findIndex(this.list, {userId: userId}), 1);
+        }
+    };
 };
