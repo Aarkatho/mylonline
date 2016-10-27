@@ -301,7 +301,13 @@ module.exports.initialize = function (io) {
                     if (usernameValidationError || passwordValidationError || rpasswordValidationError || emailValidationError) {
                         socket.emit('anonymous action', {
                             success: false,
-                            errorType: 'Bad request'
+                            errorType: 'Bad request',
+                            errors: {
+                                usernameValidationError: usernameValidationError,
+                                passwordValidationError: passwordValidationError,
+                                rpasswordValidationError: rpasswordValidationError,
+                                emailValidationError: emailValidationError
+                            }
                         });
                     } else {
                         var standarizedUsername = data.username.toLowerCase();
@@ -323,7 +329,11 @@ module.exports.initialize = function (io) {
                             if (usernameExists || emailExists) {
                                 socket.emit('anonymous action', {
                                     success: false,
-                                    errorType: 'Conflict'
+                                    errorType: 'Conflict',
+                                    errors: {
+                                        usernameExists: usernameExists,
+                                        emailExists: emailExists
+                                    }
                                 });
                             } else {
                                 var user = new User({
