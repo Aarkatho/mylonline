@@ -30,6 +30,7 @@ define(['backbone', 'socket.io', 'router', 'models/user'], function (BB, io, rou
 
     APP.socket.on('disconnect', function () {
         alert('Has sido desconectado del servidor');
+        location.reload();
     });
 
     APP.socket.on('root action', function (data) {

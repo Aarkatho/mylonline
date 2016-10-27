@@ -281,6 +281,70 @@ module.exports.initialize = function (io) {
 
                     break;
                 case 'register':
+                    var usernameValidationError;
+                    var passwordValidationError;
+                    var rpasswordValidationError;
+                    var emailValidationError;
+
+                    !validator.isAlphanumeric(data.username) || !validator.isLength(data.username, {min: 4, max: 16}) ?
+                        usernameValidationError = true : usernameValidationError = false;
+
+                    !validator.isAlphanumeric(data.password) || !validator.isLength(data.password, {min: 3, max: 16}) ?
+                        passwordValidationError = true : passwordValidationError = false;
+
+                    !validator.equals(data.password, data.rpassword) ?
+                        rpasswordValidationError = true : rpasswordValidationError = false;
+
+                    !validator.isEmail(data.email) ?
+                        emailValidationError = true : emailValidationError = false;
+
+                    if (usernameValidationError || passwordValidationError || rpasswordValidationError || emailValidationError) {
+                        socket.emit('anonymous action', {
+                            success: false,
+                            errorType: 'Bad request'
+                        });
+                    } else {
+                        var standarizedUsername = data.username.toLowerCase();
+                        var standarizedEmail = data.email.toLowerCase();
+
+                        User.find({
+                            $or: [{standarizedUsername: standarizedUsername}, {standarizedEmail: standarizedEmail}]
+                        }, function (err, users) {
+                            if (err) throw err;
+                            var usernameExists;
+                            var emailExists;
+
+                            underscore.contains(users, {standarizedUsername: standarizedUsername}) ?
+                                usernameExists = true : usernameExists = false;
+
+                            underscore.contains(users, {standarizedEmail: standarizedEmail}) ?
+                                emailExists = true : emailExists = false;
+
+                            if (usernameExists || emailExists) {
+                                socket.emit('anonymous action', {
+                                    success: false,
+                                    errorType: 'Conflict'
+                                });
+                            } else {
+                                var user = new User({
+                                    standarizedUsername: standarizedUsername,
+                                    username: data.username,
+                                    password: data.password,
+                                    email: standarizedEmail
+                                });
+
+                                user.save(function (err) {
+                                    if (err) throw err;
+
+                                    socket.emit('anonymous action', {
+                                        success: true,
+                                        message: 'Te has registrado correctamente'
+                                    });
+                                });
+                            }
+                        });
+                    }
+
                     break;
             }
         });

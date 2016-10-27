@@ -6,6 +6,7 @@ define(['backbone'], function (BB) {
         },
         initialize: function () {
             this.$('input[name="username"]').focus();
+            this.$('input[name="username"]').val(this.$('input[name="username"]').val());
         },
         login: function (event) {
             event.preventDefault();

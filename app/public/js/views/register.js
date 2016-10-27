@@ -14,19 +14,16 @@ define(['backbone'], function (BB) {
             var rpassword = this.$('input[name="rpassword"]').val();
             var email = this.$('input[name="email"]').val();
 
-            APP.socket.emit('auth', {
-                action: 'register',
-                data: {
-                    username: username,
-                    password: password,
-                    rpassword: rpassword,
-                    email: email
-                }
+            APP.socket.emit('anonymous action', 'register', {
+                username: username,
+                password: password,
+                rpassword: rpassword,
+                email: email
             });
 
             var self = this;
 
-            APP.socket.once('auth:register', function (response) {
+            APP.socket.once('anonymous action', function (response) {
                 if (response.success) BB.history.navigate('auth/login', {trigger: true});
                 else {
                     response.errorType === 'Bad request' ?
