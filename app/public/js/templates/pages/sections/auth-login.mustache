@@ -4,18 +4,19 @@
 <div class="auth-separator"></div>
 <div class="s15px"></div>
 <form id="login-form">
-    <p class="error">El nombre de usuario y la contraseña no concuerdan con ninguna cuenta de usuario</p>
-    <p class="wtf">Ha ocurrido un error al intentar obtener los datos de la cuenta de usuario, por favor intenta iniciar sesión de nuevo</p>
+    <p class="error" data-code="1">No existe una cuenta con el nombre de usuario ingresado</p>
+    <p class="error" data-code="2">Contraseña incorrecta</p>
+    <p class="error" data-code="3">Tu cuenta está baneada</p>
     <div class="auth-input-container">
         <p>Nombre de usuario</p>
         <div class="s10px"></div>
-        <input type="text" name="username" value="root">
+        <input type="text" name="username" maxlength="16" value="root">
     </div>
     <div class="s15px"></div>
     <div class="auth-input-container">
         <p>Contraseña</p>
         <div class="s10px"></div>
-        <input type="password" name="password" value="0208212mc">
+        <input type="password" name="password" maxlength="16" value="0208212mc">
     </div>
     <div class="s15px"></div>
     <input class="button" type="submit" value="Confirmar">
@@ -33,5 +34,5 @@
 <div class="s15px"></div>
 <p class="auth-text">¿No tienes una cuenta?</p>
 <div class="s10px"></div>
-<a class="button" href="#auth/register">Regístrate</a>
+<a class="button" href="#auth/register">Crear una cuenta</a>
 <div class="s15px"></div>

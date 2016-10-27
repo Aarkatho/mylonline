@@ -152,11 +152,6 @@ module.exports.initialize = function (io) {
                                             });
                                         } else {
                                             if (user.isBanned) {
-                                                socket.emit('administrator action', {
-                                                    success: false,
-                                                    errorMessage: 'El usuario objetivo (' + user.username + ') no está baneado'
-                                                });
-                                            } else {
                                                 user.isBanned = false;
 
                                                 user.save(function (err) {
@@ -166,6 +161,11 @@ module.exports.initialize = function (io) {
                                                         success: true,
                                                         message: 'El usuario objetivo (' + user.username + ') ha sido desbaneado'
                                                     });
+                                                });
+                                            } else {
+                                                socket.emit('administrator action', {
+                                                    success: false,
+                                                    errorMessage: 'El usuario objetivo (' + user.username + ') no está baneado'
                                                 });
                                             }
                                         }
@@ -236,7 +236,7 @@ module.exports.initialize = function (io) {
                                 if (user.isBanned) {
                                     socket.emit('anonymous action', {
                                         success: false,
-                                        errorMessage: 'Tu cuenta está baneada'
+                                        errorCode: 3
                                     });
                                 } else {
                                     if (users.isConnected(user.userId)) users.get(user.userId).socket.disconnect();
@@ -256,7 +256,7 @@ module.exports.initialize = function (io) {
 
                                     socket.emit('anonymous action', {
                                         success: true,
-                                        data: {
+                                        attributes: {
                                             userId: user.userId,
                                             username: user.username,
                                             email: user.email,
@@ -268,13 +268,13 @@ module.exports.initialize = function (io) {
                             } else {
                                 socket.emit('anonymous action', {
                                     success: false,
-                                    errorMessage: 'Contraseña incorrecta'
+                                    errorCode: 2
                                 });
                             }
                         } else {
                             socket.emit('anonymous action', {
                                 success: false,
-                                errorMessage: 'No existe una cuenta con el nombre de usuario que has ingresado'
+                                errorCode: 1
                             });
                         }
                     });

@@ -1,5 +1,5 @@
 <div class="s15px"></div>
-<h1>REGISTRARTE</h1>
+<h1>CREAR UNA CUENTA</h1>
 <div class="s15px"></div>
 <div class="auth-separator"></div>
 <div class="s15px"></div>
@@ -7,7 +7,7 @@
     <div id="username-input" class="auth-input-container">
         <p>Nombre de usuario</p>
         <div class="s10px"></div>
-        <input type="text" name="username">
+        <input type="text" name="username" maxlength="16">
         <p class="bad-request-error">El nombre de usuario no es válido</p>
         <p class="conflict-error">El nombre de usuario no está disponible</p>
     </div>
@@ -15,14 +15,14 @@
     <div id="password-input" class="auth-input-container">
         <p>Contraseña</p>
         <div class="s10px"></div>
-        <input type="password" name="password">
+        <input type="password" name="password" maxlength="16">
         <p class="bad-request-error">La contraseña no es válida</p>
     </div>
     <div class="s15px"></div>
     <div id="rpassword-input" class="auth-input-container">
         <p>Confirma tu contraseña</p>
         <div class="s10px"></div>
-        <input type="password" name="rpassword">
+        <input type="password" name="rpassword" maxlength="16">
         <p class="bad-request-error">Las contraseñas no coinciden</p>
     </div>
     <div class="s15px"></div>
@@ -41,5 +41,5 @@
 <div class="s15px"></div>
 <p class="auth-text">¿Ya tienes una cuenta?</p>
 <div class="s10px"></div>
-<a class="button" href="#auth/login">Inicia sesión</a>
+<a class="button" href="#auth/login">Iniciar sesión</a>
 <div class="s15px"></div>

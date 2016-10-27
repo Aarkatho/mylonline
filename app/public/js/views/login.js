@@ -10,6 +10,7 @@ define(['backbone'], function (BB) {
         },
         login: function (event) {
             event.preventDefault();
+            this.$('.error').hide();
             var username = this.$('input[name="username"]').val();
             var password = this.$('input[name="password"]').val();
 
@@ -20,26 +21,11 @@ define(['backbone'], function (BB) {
 
             var self = this;
 
-            APP.socket.once('anonymous action', function (response) {
-                if (response.success) {
-                    APP.user.set(response.data);
+            APP.socket.once('anonymous action', function (data) {
+                if (data.success) {
+                    APP.user.set(data.attributes);
                     BB.history.navigate('dashboard', {trigger: true});
-
-                    /*
-                    APP.user.fetch({
-                        success: function (model, res, options) {
-                            APP.user.set({isLoggedIn: true});
-                            BB.history.navigate('dashboard', {trigger: true});
-                        },
-                        error: function (model, res, options) {
-                            self.$('.wtf').show();
-                        }
-                    });
-                    */
-                } else {
-                    if (response.errorType === 'Forbidden') BB.history.navigate('banned', {trigger: true});
-                    else self.$('.error').show();
-                }
+                } else self.$('.error[data-code="' + data.errorCode + '"]').show();
             });
         }
     });
