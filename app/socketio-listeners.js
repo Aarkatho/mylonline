@@ -240,13 +240,6 @@ module.exports.initialize = function (io) {
                                     });
                                 } else {
                                     if (users.isConnected(user.userId)) users.get(user.userId).socket.disconnect();
-                                    socket.join('users');
-
-                                    users.add({
-                                        userId: user.userId,
-                                        username: user.username,
-                                        socket: socket
-                                    });
 
                                     socket.request.session.user = {
                                         userId: user.userId,
@@ -263,6 +256,14 @@ module.exports.initialize = function (io) {
                                             isRoot: user.isRoot,
                                             isAdministrator: user.isAdministrator
                                         }
+                                    });
+
+                                    socket.join('users');
+
+                                    users.add({
+                                        userId: user.userId,
+                                        username: user.username,
+                                        socket: socket
                                     });
                                 }
                             } else {
@@ -365,6 +366,7 @@ module.exports.initialize = function (io) {
         add: function (user) {
             this.list.push(user);
             io.to('users').emit('application action', 'update users', this.getAll());
+            console.log(this.list.length);
         },
         get: function (userId) {
             return underscore.findWhere(this.list, {userId: userId});
@@ -379,6 +381,8 @@ module.exports.initialize = function (io) {
         },
         remove: function (userId) {
             this.list.splice(underscore.findIndex(this.list, {userId: userId}), 1);
+            io.to('users').emit('application action', 'update users', this.getAll());
+            console.log(this.list.length);
         }
     };
 };

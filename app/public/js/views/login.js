@@ -1,4 +1,4 @@
-define(['backbone'], function (BB) {
+define(['backbone', 'models/user', 'collections/users'], function (BB, UserModel, UsersCollection) {
     return BB.View.extend({
         el: '#login-form',
         events: {
@@ -23,7 +23,8 @@ define(['backbone'], function (BB) {
 
             APP.socket.once('anonymous action', function (data) {
                 if (data.success) {
-                    APP.user.set(data.attributes);
+                    APP.user = new UserModel(data.attributes);
+                    APP.users = new UsersCollection(APP.user);
                     BB.history.navigate('dashboard', {trigger: true});
                 } else self.$('.error[data-code="' + data.errorCode + '"]').show();
             });

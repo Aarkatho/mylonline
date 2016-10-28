@@ -1,7 +1,7 @@
-define(['backbone', 'socket.io', 'router', 'models/user'], function (BB, io, router, UserModel) {
-    window.APP = {};
-    APP.socket = io();
-    APP.user = new UserModel();
+define(['backbone', 'socket.io', 'router'], function (BB, io, router) {
+    window.APP = {
+        socket: io()
+    };
 
     BB.Model.prototype.parse = function (resp, options) {
         return resp.data;
@@ -29,30 +29,37 @@ define(['backbone', 'socket.io', 'router', 'models/user'], function (BB, io, rou
     // for test
 
     APP.socket.on('disconnect', function () {
-        alert('Has sido desconectado del servidor');
+        alert('Desconectado');
         location.reload();
     });
 
     APP.socket.on('root action', function (data) {
-        console.log(data);
+        //console.log(data);
     });
 
     APP.socket.on('administrator action', function (data) {
-        console.log(data);
+        //console.log(data);
     });
 
     APP.socket.on('user action', function (data) {
-        console.log(data);
+        //console.log(data);
     });
 
     APP.socket.on('anonymous action', function (data) {
-        console.log(data);
+        //console.log(data);
     });
 
     APP.socket.on('application action', function (action, data) {
         switch (action) {
             case 'update users':
-                console.log('users list updated', data);
+                APP.users.set(data);
+                // test
+                $('#online > ul').html('');
+                console.log(APP.users);
+                APP.users.map(function (user) {
+                    $('#online > ul').append('<li>' + user.get('userId') + '#' + user.get('username') + '</li>');
+                });
+                // <
                 break;
         }
     });
