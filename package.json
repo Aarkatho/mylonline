@@ -14,10 +14,10 @@
     "mongoose": "~4.5.9",
     "hogan-express": "~0.5.2",
     "socket.io": "~1.4.8",
-    "validator": "~5.5.0",
     "underscore": "~1.8.3",
     "express-session": "~1.14.0",
     "mongoose-auto-increment": "~5.0.1",
-    "bluebird": "~3.4.6"
+    "bluebird": "~3.4.6",
+    "validator": "~6.1.0"
   }
 }

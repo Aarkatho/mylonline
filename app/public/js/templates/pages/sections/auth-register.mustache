@@ -4,34 +4,28 @@
 <div class="auth-separator"></div>
 <div class="s15px"></div>
 <form id="register-form">
-    <div id="username-input" class="auth-input-container">
+    <div id="username-input-container" class="auth-input-container">
         <p>Nombre de usuario</p>
         <div class="s10px"></div>
-        <input type="text" name="username" maxlength="16">
-        <p class="bad-request-error">El nombre de usuario no es válido</p>
-        <p class="conflict-error">El nombre de usuario no está disponible</p>
+        <input type="text" name="username" maxlength="16" spellcheck="false">
     </div>
     <div class="s15px"></div>
-    <div id="password-input" class="auth-input-container">
+    <div id="email-input-container" class="auth-input-container">
+        <p>Correo electrónico</p>
+        <div class="s10px"></div>
+        <input type="text" name="email" spellcheck="false">
+    </div>
+    <div class="s15px"></div>
+    <div id="password-input-container" class="auth-input-container">
         <p>Contraseña</p>
         <div class="s10px"></div>
         <input type="password" name="password" maxlength="16">
-        <p class="bad-request-error">La contraseña no es válida</p>
     </div>
     <div class="s15px"></div>
-    <div id="rpassword-input" class="auth-input-container">
+    <div id="rpassword-input-container" class="auth-input-container">
         <p>Confirma tu contraseña</p>
         <div class="s10px"></div>
         <input type="password" name="rpassword" maxlength="16">
-        <p class="bad-request-error">Las contraseñas no coinciden</p>
-    </div>
-    <div class="s15px"></div>
-    <div id="email-input" class="auth-input-container">
-        <p>Correo electrónico</p>
-        <div class="s10px"></div>
-        <input type="text" name="email">
-        <p class="bad-request-error">La dirección de correo electrónico no es válida</p>
-        <p class="conflict-error">La dirección de correo electrónico no está disponible</p>
     </div>
     <div class="s15px"></div>
     <input class="button" type="submit" value="Confirmar">

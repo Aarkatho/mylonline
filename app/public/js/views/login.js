@@ -10,7 +10,6 @@ define(['backbone', 'models/user', 'collections/users'], function (BB, UserModel
         },
         login: function (event) {
             event.preventDefault();
-            this.$('.error').hide();
             var username = this.$('input[name="username"]').val();
             var password = this.$('input[name="password"]').val();
 
@@ -26,7 +25,19 @@ define(['backbone', 'models/user', 'collections/users'], function (BB, UserModel
                     APP.user = new UserModel(data.attributes);
                     APP.users = new UsersCollection(APP.user);
                     BB.history.navigate('dashboard', {trigger: true});
-                } else self.$('.error[data-code="' + data.errorCode + '"]').show();
+                } else {
+                    switch (data.errorCode) {
+                        case 1:
+                            APP.currentPage.currentSection.view.showErrorMessage('No existe una cuenta con el nombre de usuario ingresado');
+                            break;
+                        case 2:
+                            APP.currentPage.currentSection.view.showErrorMessage('Contraseña incorrecta');
+                            break;
+                        case 3:
+                            APP.currentPage.currentSection.view.showErrorMessage('Tu cuenta está baneada');
+                            break;
+                    }
+                }
             });
         }
     });

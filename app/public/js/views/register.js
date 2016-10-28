@@ -10,37 +10,43 @@ define(['backbone'], function (BB) {
         register: function (event) {
             event.preventDefault();
             var username = this.$('input[name="username"]').val();
+            var email = this.$('input[name="email"]').val();
             var password = this.$('input[name="password"]').val();
             var rpassword = this.$('input[name="rpassword"]').val();
-            var email = this.$('input[name="email"]').val();
 
             APP.socket.emit('anonymous action', 'register', {
                 username: username,
+                email: email,
                 password: password,
-                rpassword: rpassword,
-                email: email
+                rpassword: rpassword
             });
 
             var self = this;
 
-            APP.socket.once('anonymous action', function (response) {
-                if (response.success) BB.history.navigate('auth/login', {trigger: true});
+            APP.socket.once('anonymous action', function (data) {
+                if (data.success) BB.history.navigate('auth/login', {trigger: true});
                 else {
-                    response.errorType === 'Bad request' ?
-                        self.showBadRequestErrors(response.errors) :
-                        self.showConflictErrors(response.errors);
+                    if (data.statusCode === 1) this.showErrorMessage('Corrige el valor en los campos con error');
+                    else {
+                        //
+                    }
+
+                    this.showErrors(data.attrsWithError);
                 }
             });
         },
-        showBadRequestErrors: function (errors) {
-            if (errors.usernameValidationError) this.$('#username-input > p.bad-request-error').show();
-            if (errors.passwordValidationError) this.$('#password-input > p.bad-request-error').show();
-            if (errors.rpasswordValidationError) this.$('#rpassword-input > p.bad-request-error').show();
-            if (errors.emailValidationError) this.$('#email-input > p.bad-request-error').show();
+        showErrorMessage: function (message) {
+            this.$('#error-message').text(message);
         },
-        showConflictErrors: function (errors) {
-            if (errors.usernameExists) this.$('#username-input > p.conflict-error').show();
-            if (errors.emailExists) this.$('#email-input > p.conflict-error').show();
+        addErrorClasses: function (attrsWithError) {
+            var self = this;
+
+            _.each(attrsWithError, function (attrWithError) {
+                self.$('#' + attrWithError.name + '-input-container > input').addClass('has-error');
+            });
+        },
+        removeErrorClasses: function () {
+            this.$('.has-error').removeClass('.has-error');
         }
     });
 });

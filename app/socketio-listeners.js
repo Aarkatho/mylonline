@@ -282,32 +282,44 @@ module.exports.initialize = function (io) {
 
                     break;
                 case 'register':
-                    var usernameValidationError;
-                    var passwordValidationError;
-                    var rpasswordValidationError;
-                    var emailValidationError;
+                    var usernameValidationStatus;
+                    var emailValidationStatus;
+                    var passwordValidationStatus;
+                    var rpasswordValidationStatus;
 
-                    !validator.isAlphanumeric(data.username) || !validator.isLength(data.username, {min: 4, max: 16}) ?
-                        usernameValidationError = true : usernameValidationError = false;
+                    if (validator.isEmpty(data.username)) usernameValidationStatus = 1;
+                    else {
+                        validator.isAlphanumeric(data.username) && validator.isLength(data.username, {min: 4, max: 16}) ?
+                            usernameValidationStatus = 0 : usernameValidationStatus = 2;
+                    }
 
-                    !validator.isAlphanumeric(data.password) || !validator.isLength(data.password, {min: 3, max: 16}) ?
-                        passwordValidationError = true : passwordValidationError = false;
+                    if (validator.isEmpty(data.email)) emailValidationStatus = 1;
+                    else {
+                        validator.isEmail(data.email) ?
+                            emailValidationStatus = 0 : emailValidationStatus = 2;
+                    }
 
-                    !validator.equals(data.password, data.rpassword) ?
-                        rpasswordValidationError = true : rpasswordValidationError = false;
+                    if (validator.isEmpty(data.password)) passwordValidationStatus = 1;
+                    else {
+                        validator.isAlphanumeric(data.password) && validator.isLength(data.password, {min: 3, max: 16}) ?
+                            passwordValidationStatus = 0 : passwordValidationStatus = 2;
+                    }
 
-                    !validator.isEmail(data.email) ?
-                        emailValidationError = true : emailValidationError = false;
+                    if (validator.isEmpty(data.rpassword)) rpasswordValidationStatus = 1;
+                    else {
+                        validator.equals(data.password, data.rpassword) ?
+                            rpasswordValidationStatus = 0 : rpasswordValidationStatus = 2;
+                    }
 
-                    if (usernameValidationError || passwordValidationError || rpasswordValidationError || emailValidationError) {
+                    if (algo) {
                         socket.emit('anonymous action', {
                             success: false,
-                            errorType: 'Bad request',
+                            errorCode: 1,
                             errors: {
                                 usernameValidationError: usernameValidationError,
+                                emailValidationError: emailValidationError,
                                 passwordValidationError: passwordValidationError,
-                                rpasswordValidationError: rpasswordValidationError,
-                                emailValidationError: emailValidationError
+                                rpasswordValidationError: rpasswordValidationError
                             }
                         });
                     } else {
@@ -330,7 +342,7 @@ module.exports.initialize = function (io) {
                             if (usernameExists || emailExists) {
                                 socket.emit('anonymous action', {
                                     success: false,
-                                    errorType: 'Conflict',
+                                    errorCode: 2,
                                     errors: {
                                         usernameExists: usernameExists,
                                         emailExists: emailExists

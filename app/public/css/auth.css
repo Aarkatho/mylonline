@@ -17,7 +17,7 @@
 
 .auth-section > h1 {
     /* font */
-    color: rgb(150, 150, 150);
+    color: rgb(175, 175, 175);
     font-family: sans-serif;
     font-size: 18px;
     text-align: center;
@@ -33,10 +33,14 @@
 
 .auth-input-container > p, .auth-text {
     /* font */
-    color: rgb(125, 125, 125);
     font-family: sans-serif;
-    font-size: 14px;
     text-align: center;
+}
+
+.auth-input-container > p:not(.conflict), .auth-text {
+    /* font */
+    color: rgb(125, 125, 125);
+    font-size: 14px;
 }
 
 .auth-input-container > input {
@@ -60,9 +64,13 @@
     background-color: rgb(20, 20, 20);
 }
 
-.bad-request-error, .conflict-error {
-    color: brown !important;
+.has-error {
+    border-color: brown !important;
+}
+
+.conflict {
+    color: brown;
     display: none;
-    font-size: 12px !important;
+    font-size: 12px;
     margin-top: 5px;
 }
