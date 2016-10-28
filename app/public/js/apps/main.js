@@ -34,15 +34,15 @@ define(['backbone', 'socket.io', 'router'], function (BB, io, router) {
     });
 
     APP.socket.on('root action', function (data) {
-        //console.log(data);
+        console.log(data);
     });
 
     APP.socket.on('administrator action', function (data) {
-        //console.log(data);
+        console.log(data);
     });
 
     APP.socket.on('user action', function (data) {
-        //console.log(data);
+        console.log(data);
     });
 
     APP.socket.on('anonymous action', function (data) {
@@ -55,7 +55,6 @@ define(['backbone', 'socket.io', 'router'], function (BB, io, router) {
                 APP.users.set(data);
                 // test
                 $('#online > ul').html('');
-                console.log(APP.users);
                 APP.users.map(function (user) {
                     $('#online > ul').append('<li>' + user.get('userId') + '#' + user.get('username') + '</li>');
                 });

@@ -4,10 +4,31 @@
     <div id="section-loader"></div>
 </div>
 <br>
-<a href="#auth">Ir a la página "auth"</a>
-<br>
-<br>
-<a href="#banned">Ir a la página "banned"</a>
+<!-- test -->
+<style type="text/css">
+    li.msg {
+        font-size: 14px;
+        font-family: sans-serif;
+        background-color: rgb(220, 220, 220);
+        line-height: 28px;
+        padding-left: 10px;
+    }
+
+    li.msg:nth-child(odd) {
+        background-color: rgb(200, 200, 200);
+    }
+</style>
+<div style="margin-left: 10px; padding: 10px; background-color: white; width: 500px;">
+    <p>Intento barato de chat:</p>
+    <br>
+    <ul id="messages" style="border: 1px solid black;">
+    </ul>
+    <br>
+    <form id="chat">
+        <input id="m" type="text" name="msg">
+        <input type="submit" name="Enviar">
+    </form>
+</div>
 <div style="
     background-color: rgb(175, 175, 175);
     bottom: 10px;
@@ -26,3 +47,16 @@
     <br>
     <p>isAdministrator: {{user.isAdministrator}}</p>
 </div>
+<script type="text/javascript">
+    $('#chat').submit(function () {
+        APP.socket.emit('chat msg', '- ' + APP.user.get('username') + ': ' + $('#m').val());
+
+        $('#m').val('');
+        return false;
+    });
+
+    APP.socket.on('chat msg', function (msg) {
+        $('#messages').append($('<li class="msg">' + msg + '</li>'));
+    });
+</script>
+<!-- < -->

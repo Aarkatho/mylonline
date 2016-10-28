@@ -359,6 +359,12 @@ module.exports.initialize = function (io) {
                     break;
             }
         });
+
+        // test
+        socket.on('chat msg', function (msg) {
+            io.emit('chat msg', msg);
+        });
+        // <
     });
 
     var users = {
@@ -366,7 +372,6 @@ module.exports.initialize = function (io) {
         add: function (user) {
             this.list.push(user);
             io.to('users').emit('application action', 'update users', this.getAll());
-            console.log(this.list.length);
         },
         get: function (userId) {
             return underscore.findWhere(this.list, {userId: userId});
@@ -382,7 +387,6 @@ module.exports.initialize = function (io) {
         remove: function (userId) {
             this.list.splice(underscore.findIndex(this.list, {userId: userId}), 1);
             io.to('users').emit('application action', 'update users', this.getAll());
-            console.log(this.list.length);
         }
     };
 };
