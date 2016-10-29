@@ -6,19 +6,19 @@
 /**/
 
 a:not(.button) {
-    color: rgb(150, 30, 30);
+    color: rgb(30, 150, 150);
     font-family: sans-serif;
     font-size: 14px;
     text-decoration: none;
 }
 
 a:not(.button):hover {
-    color: rgb(140, 20, 20);
+    color: rgb(20, 140, 140);
     text-decoration: underline;
 }
 
 a:not(.button):active {
-    color: rgb(130, 10, 10);
+    color: rgb(10, 130, 130);
 }
 
 .button {
@@ -27,8 +27,6 @@ a:not(.button):active {
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.30);
     box-sizing: border-box;
     display: block;
-    height: 34px;
-    line-height: 32px;
     margin: 0 auto;
     outline: none;
     padding: 0px;
@@ -39,6 +37,7 @@ a:not(.button):active {
     color: rgb(150, 150, 150);
     font-family: sans-serif;
     font-size: 14px;
+    line-height: 32px;
     text-align: center;
 }
 

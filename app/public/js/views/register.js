@@ -26,12 +26,12 @@ define(['backbone'], function (BB) {
             APP.socket.once('anonymous action', function (data) {
                 if (data.success) BB.history.navigate('auth/login', {trigger: true});
                 else {
-                    if (data.statusCode === 1) this.showErrorMessage('Corrige el valor en los campos con error');
+                    if (data.errorCode === 1) self.showErrorMessage('Corrige el valor en los campos con error');
                     else {
                         //
                     }
 
-                    this.showErrors(data.attrsWithError);
+                    self.addErrorClasses(data.attrsWithError);
                 }
             });
         },

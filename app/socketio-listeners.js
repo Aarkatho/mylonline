@@ -1,5 +1,5 @@
 var validator = require('validator');
-var underscore = require('underscore');
+var _ = require('underscore');
 
 var User = require('./models/user');
 
@@ -240,22 +240,11 @@ module.exports.initialize = function (io) {
                                     });
                                 } else {
                                     if (users.isConnected(user.userId)) users.get(user.userId).socket.disconnect();
-
-                                    socket.request.session.user = {
-                                        userId: user.userId,
-                                        isRoot: user.isRoot,
-                                        isAdministrator: user.isAdministrator
-                                    };
+                                    socket.request.session.user = user.getSessionAttrs();
 
                                     socket.emit('anonymous action', {
                                         success: true,
-                                        attributes: {
-                                            userId: user.userId,
-                                            username: user.username,
-                                            email: user.email,
-                                            isRoot: user.isRoot,
-                                            isAdministrator: user.isAdministrator
-                                        }
+                                        attrs: user.getPrivateAttrs()
                                     });
 
                                     socket.join('users');
@@ -282,44 +271,25 @@ module.exports.initialize = function (io) {
 
                     break;
                 case 'register':
-                    var usernameValidationStatus;
-                    var emailValidationStatus;
-                    var passwordValidationStatus;
-                    var rpasswordValidationStatus;
+                    var usernameValidationError = validator.isAlphanumeric(data.username) && validator.isLength(data.username, {min: 4, max: 16}) ?
+                        false : true;
 
-                    if (validator.isEmpty(data.username)) usernameValidationStatus = 1;
-                    else {
-                        validator.isAlphanumeric(data.username) && validator.isLength(data.username, {min: 4, max: 16}) ?
-                            usernameValidationStatus = 0 : usernameValidationStatus = 2;
-                    }
+                    var emailValidationError = validator.isEmail(data.email) && validator.isLength(data.email, {max: 254}) ? false : true;
 
-                    if (validator.isEmpty(data.email)) emailValidationStatus = 1;
-                    else {
-                        validator.isEmail(data.email) ?
-                            emailValidationStatus = 0 : emailValidationStatus = 2;
-                    }
+                    var passwordValidationError = validator.isAlphanumeric(data.password) && validator.isLength(data.password, {min: 3, max: 16}) ?
+                        false : true;
 
-                    if (validator.isEmpty(data.password)) passwordValidationStatus = 1;
-                    else {
-                        validator.isAlphanumeric(data.password) && validator.isLength(data.password, {min: 3, max: 16}) ?
-                            passwordValidationStatus = 0 : passwordValidationStatus = 2;
-                    }
+                    var rpasswordValidationError = validator.equals(data.password, data.rpassword) ? false : true;
 
-                    if (validator.isEmpty(data.rpassword)) rpasswordValidationStatus = 1;
-                    else {
-                        validator.equals(data.password, data.rpassword) ?
-                            rpasswordValidationStatus = 0 : rpasswordValidationStatus = 2;
-                    }
-
-                    if (algo) {
+                    if (usernameValidationError || emailValidationError || passwordValidationError || rpasswordValidationError) {
                         socket.emit('anonymous action', {
                             success: false,
                             errorCode: 1,
-                            errors: {
-                                usernameValidationError: usernameValidationError,
-                                emailValidationError: emailValidationError,
-                                passwordValidationError: passwordValidationError,
-                                rpasswordValidationError: rpasswordValidationError
+                            attrsWithError: {
+                                username: usernameValidationError,
+                                email: emailValidationError,
+                                password: passwordValidationError,
+                                rpassword: rpasswordValidationError
                             }
                         });
                     } else {
@@ -330,39 +300,29 @@ module.exports.initialize = function (io) {
                             $or: [{standarizedUsername: standarizedUsername}, {standarizedEmail: standarizedEmail}]
                         }, function (err, users) {
                             if (err) throw err;
-                            var usernameExists;
-                            var emailExists;
-
-                            underscore.contains(users, {standarizedUsername: standarizedUsername}) ?
-                                usernameExists = true : usernameExists = false;
-
-                            underscore.contains(users, {standarizedEmail: standarizedEmail}) ?
-                                emailExists = true : emailExists = false;
+                            var usernameExists = _.contains(users, {standarizedUsername: standarizedUsername}) ? true : false;
+                            var emailExists = _.contains(users, {email: standarizedEmail}) ? true : false;
 
                             if (usernameExists || emailExists) {
                                 socket.emit('anonymous action', {
                                     success: false,
                                     errorCode: 2,
-                                    errors: {
-                                        usernameExists: usernameExists,
-                                        emailExists: emailExists
+                                    attrsWithError: {
+                                        username: usernameExists,
+                                        email: emailExists
                                     }
                                 });
                             } else {
                                 var user = new User({
                                     standarizedUsername: standarizedUsername,
                                     username: data.username,
-                                    password: data.password,
-                                    email: standarizedEmail
+                                    email: standarizedEmail,
+                                    password: data.password
                                 });
 
                                 user.save(function (err) {
                                     if (err) throw err;
-
-                                    socket.emit('anonymous action', {
-                                        success: true,
-                                        message: 'Te has registrado correctamente'
-                                    });
+                                    socket.emit('anonymous action', {success: true});
                                 });
                             }
                         });
@@ -386,18 +346,18 @@ module.exports.initialize = function (io) {
             io.to('users').emit('application action', 'update users', this.getAll());
         },
         get: function (userId) {
-            return underscore.findWhere(this.list, {userId: userId});
+            return _.findWhere(this.list, {userId: userId});
         },
         getAll: function () {
-            return underscore.map(this.list, function (user) {
-                return underscore.omit(user, 'socket');
+            return _.map(this.list, function (user) {
+                return _.omit(user, 'socket');
             });
         },
         isConnected: function (userId) {
-            return underscore.findIndex(this.list, {userId: userId}) !== -1 ? true : false;
+            return _.findIndex(this.list, {userId: userId}) !== -1 ? true : false;
         },
         remove: function (userId) {
-            this.list.splice(underscore.findIndex(this.list, {userId: userId}), 1);
+            this.list.splice(_.findIndex(this.list, {userId: userId}), 1);
             io.to('users').emit('application action', 'update users', this.getAll());
         }
     };
