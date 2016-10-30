@@ -329,11 +329,7 @@ module.exports.initialize = function (io) {
             }
         });
 
-        // test
-        socket.on('chat msg', function (msg) {
-            io.emit('chat msg', msg);
-        });
-        // <
+        socket.on('application action', function (action, data) {});
     });
 
     var users = {

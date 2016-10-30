@@ -46,20 +46,6 @@ define(['backbone', 'socket.io', 'router'], function (BB, io, router) {
     });
 
     APP.socket.on('anonymous action', function (data) {
-        //console.log(data);
-    });
-
-    APP.socket.on('application action', function (action, data) {
-        switch (action) {
-            case 'update users':
-                APP.users.set(data);
-                // test
-                $('#online > ul').html('');
-                APP.users.map(function (user) {
-                    $('#online > ul').append('<li>' + user.get('userId') + '#' + user.get('username') + '</li>');
-                });
-                // <
-                break;
-        }
+        console.log(data);
     });
 });
