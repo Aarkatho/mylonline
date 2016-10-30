@@ -4,6 +4,7 @@
 <div class="auth-separator"></div>
 <div class="s15px"></div>
 <form id="register-form">
+    <p id="auth-error-message" class="centered-text"></p>
     <div id="username-input-container" class="auth-input-container">
         <p class="centered-text">Nombre de usuario</p>
         <div class="s10px"></div>
@@ -13,7 +14,7 @@
     <div id="email-input-container" class="auth-input-container">
         <p class="centered-text">Correo electrónico</p>
         <div class="s10px"></div>
-        <input type="text" name="email" spellcheck="false">
+        <input type="text" name="email" maxlength="254" spellcheck="false">
     </div>
     <div class="s15px"></div>
     <div id="password-input-container" class="auth-input-container">

@@ -297,11 +297,11 @@ module.exports.initialize = function (io) {
                         var standarizedEmail = data.email.toLowerCase();
 
                         User.find({
-                            $or: [{standarizedUsername: standarizedUsername}, {standarizedEmail: standarizedEmail}]
+                            $or: [{standarizedUsername: standarizedUsername}, {email: standarizedEmail}]
                         }, function (err, users) {
                             if (err) throw err;
-                            var usernameExists = _.contains(users, {standarizedUsername: standarizedUsername}) ? true : false;
-                            var emailExists = _.contains(users, {email: standarizedEmail}) ? true : false;
+                            var usernameExists = _.findWhere(users, {standarizedUsername: standarizedUsername}) ? true : false;
+                            var emailExists = _.findWhere(users, {email: standarizedEmail}) ? true : false;
 
                             if (usernameExists || emailExists) {
                                 socket.emit('anonymous action', {

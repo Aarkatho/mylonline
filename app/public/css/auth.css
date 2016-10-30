@@ -69,6 +69,6 @@
     background-color: rgb(20, 20, 20);
 }
 
-.has-error {
+.error {
     border-color: rgb(150, 30, 30) !important;
 }
