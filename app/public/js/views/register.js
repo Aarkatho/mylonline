@@ -19,8 +19,7 @@ define(['backbone'], function (BB) {
             APP.socket.emit('anonymous action', 'register', {
                 username: this.$('input[name="username"]').val(),
                 email: this.$('input[name="email"]').val(),
-                password: this.$('input[name="password"]').val(),
-                rpassword: this.$('input[name="rpassword"]').val()
+                password: this.$('input[name="password"]').val()
             });
 
             var self = this;
@@ -28,7 +27,7 @@ define(['backbone'], function (BB) {
             APP.socket.once('anonymous action', function (data) {
                 if (data.success) BB.history.navigate('auth/login', {trigger: true});
                 else {
-                    if (data.errorCode === 1) self.$('#auth-error-message').text('Corrige el valor en los campos marcados.');
+                    if (data.errorCode === 1) self.$('#auth-error-message').text('Corrige los campos con error.');
                     else {
                         if (data.attrsWithError.username && data.attrsWithError.email) {
                             self.$('#auth-error-message').text('Nombre de usuario y email no disponibles.');
@@ -41,7 +40,6 @@ define(['backbone'], function (BB) {
                     if (data.attrsWithError.username) self.$('input[name="username"]').addClass('error');
                     if (data.attrsWithError.email) self.$('input[name="email"]').addClass('error');
                     if (data.attrsWithError.password) self.$('input[name="password"]').addClass('error');
-                    if (data.attrsWithError.rpassword) self.$('input[name="rpassword"]').addClass('error');
                 }
             });
         },

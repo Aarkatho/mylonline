@@ -279,17 +279,14 @@ module.exports.initialize = function (io) {
                     var passwordValidationError = validator.isAlphanumeric(data.password) && validator.isLength(data.password, {min: 3, max: 16}) ?
                         false : true;
 
-                    var rpasswordValidationError = validator.equals(data.password, data.rpassword) ? false : true;
-
-                    if (usernameValidationError || emailValidationError || passwordValidationError || rpasswordValidationError) {
+                    if (usernameValidationError || emailValidationError || passwordValidationError) {
                         socket.emit('anonymous action', {
                             success: false,
                             errorCode: 1,
                             attrsWithError: {
                                 username: usernameValidationError,
                                 email: emailValidationError,
-                                password: passwordValidationError,
-                                rpassword: rpasswordValidationError
+                                password: passwordValidationError
                             }
                         });
                     } else {
