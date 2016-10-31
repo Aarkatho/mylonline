@@ -48,4 +48,14 @@ define(['backbone', 'socket.io', 'router'], function (BB, io, router) {
     APP.socket.on('anonymous action', function (data) {
         console.log(data);
     });
+
+    APP.socket.on('application action', function (action, data) {
+        console.log(data);
+
+        switch (action) {
+            case 'update users':
+                APP.users.set(data);
+                break;
+        }
+    });
 });
