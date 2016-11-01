@@ -27,7 +27,6 @@ define(['backbone', 'hgn!templates/pages/dashboard', 'backbone.stickit'], functi
             this.$el.html(markup);
             this.stickit(APP.user);
             this.$el.appendTo('#page-container');
-            $('#online').show(); // test
             deferred.resolve();
             return deferred.promise();
         }

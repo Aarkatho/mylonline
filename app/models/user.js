@@ -19,6 +19,10 @@ var UserSchema = new Schema({
     isBanned: {
         type: Boolean,
         default: false
+    },
+    iconId: {
+        type: Number,
+        default: 1
     }
 });
 
@@ -36,7 +40,8 @@ UserSchema.methods.getPrivateAttrs = function () {
         username: this.username,
         email: this.email,
         isRoot: this.isRoot,
-        isAdministrator: this.isAdministrator
+        isAdministrator: this.isAdministrator,
+        iconId: this.iconId
     };
 };
 
@@ -47,7 +52,8 @@ UserSchema.methods.getPublicAttrs = function () {
         email: this.email,
         isRoot: this.isRoot,
         isAdministrator: this.isAdministrator,
-        isBanned: this.isBanned
+        isBanned: this.isBanned,
+        iconId: this.iconId
     };
 };
 

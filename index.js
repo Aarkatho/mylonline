@@ -38,7 +38,7 @@ socketIoListeners.initialize(io);
 
 mongoose.Promise = bluebird;
 
-mongoose.connect('mongodb://test:123@jello.modulusmongo.net:27017/yqeguW4i', function (err) {
+mongoose.connect('mongodb://test:123@jello.modulusmongo.net:27017/o9Warodi', function (err) {
     if (err) throw err;
 
     User.findOne({standarizedUsername: 'root'}, function (err, user) {

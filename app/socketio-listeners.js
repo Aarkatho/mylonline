@@ -252,6 +252,7 @@ module.exports.initialize = function (io) {
                                     users.add({
                                         userId: user.userId,
                                         username: user.username,
+                                        iconId: user.iconId,
                                         socket: socket
                                     });
                                 }

@@ -6,3 +6,46 @@
     right: 10px;
     width: 250px;
 }
+
+.dashboard-separator {
+    background-color: rgb(35, 35, 35);
+    height: 1px;
+    margin: 0 15px;
+}
+
+#dashboard-community-user {
+    padding: 0 15px;
+}
+
+#dashboard-community-user-icon {
+    display: block;
+    width: 50px;
+}
+
+#dashboard-community-user-username {
+    /* font */
+    color: rgb(175, 175, 175);
+    font-family: sans-serif;
+}
+
+#dashboard-community-general {
+}
+
+#dashboard-community-friends {
+}
+
+#dashboard-community-blocked {
+}
+
+.dashboard-community-userlist {
+    padding-top: 15px;
+}
+
+.dashboard-community-userlist-user {
+    padding: 0 15px;
+}
+
+.dashboard-community-userlist-user-icon {
+    display: block;
+    width: 40px;
+}
