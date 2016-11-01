@@ -24,7 +24,7 @@
 }
 
 .auth-separator {
-    background-color: rgb(35, 35, 35);
+    background-color: rgb(30, 30, 30);
     height: 1px;
     margin: 0 15px;
 }
@@ -50,7 +50,7 @@
 
 .auth-input-container > input {
     background-color: rgb(10, 10, 10);
-    border: 1px solid rgb(35, 35, 35);
+    border: 1px solid rgb(30, 30, 30);
     box-sizing: border-box;
     display: block;
     height: 34px;

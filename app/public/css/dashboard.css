@@ -18,8 +18,9 @@
 }
 
 #dashboard-community-user-icon {
+    border: 1px solid rgb(35, 35, 35);
     display: block;
-    width: 50px;
+    width: 48px;
 }
 
 #dashboard-community-user-username {
@@ -48,4 +49,11 @@
 .dashboard-community-userlist-user-icon {
     display: block;
     width: 40px;
+}
+
+/**/
+
+#dashboard > header {
+    height: 75px;
+    background: linear-gradient(to bottom, rgb(15, 15, 15) 0%, rgba(15, 15, 15, 0.75) 100%);
 }

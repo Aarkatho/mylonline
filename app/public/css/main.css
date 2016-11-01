@@ -6,24 +6,24 @@
 /**/
 
 a:not(.button) {
-    color: rgb(30, 150, 150);
+    color: rgb(150, 30, 30);
     font-family: sans-serif;
     font-size: 14px;
     text-decoration: none;
 }
 
 a:not(.button):hover {
-    color: rgb(20, 140, 140);
+    color: rgb(140, 20, 20);
     text-decoration: underline;
 }
 
 a:not(.button):active {
-    color: rgb(10, 130, 130);
+    color: rgb(130, 10, 10);
 }
 
 .button {
     background-color: rgb(24, 24, 24);
-    border: 1px solid rgb(44, 44, 44);
+    border: 1px solid rgb(34, 34, 34);
     box-sizing: border-box;
     display: block;
     margin: 0 auto;
@@ -42,12 +42,12 @@ a:not(.button):active {
 
 .button:hover {
     background-color: rgb(21, 21, 21);
-    border-color: rgb(41, 41, 41);
+    border-color: rgb(31, 31, 31);
 }
 
 .button:active {
     background-color: rgb(18, 18, 18);
-    border-color: rgb(38, 38, 38);
+    border-color: rgb(28, 28, 28);
 }
 
 /**/
@@ -62,9 +62,12 @@ a:not(.button):active {
 
 #page-loader p {
     bottom: 10px;
-    color: rgb(175, 175, 175);
     position: absolute;
     right: 10px;
+    /* font */
+    color: rgb(175, 175, 175);
+    font-family: sans-serif;
+    font-size: 16px;
 }
 
 #page-container {

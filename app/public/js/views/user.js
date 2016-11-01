@@ -1,7 +1,7 @@
 define(['backbone', 'hgn!templates/user', 'backbone.stickit'], function (BB, userTemplate) {
     return BB.View.extend({
         tagName: 'li',
-        className: 'userlist',
+        className: 'dashboard-community-userlist-user',
         bindings: {
             '.dashboard-community-userlist-user-icon': {
                 observe: 'iconId',
