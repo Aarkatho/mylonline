@@ -22,8 +22,8 @@ a:not(.button):active {
 }
 
 .button {
-    background-color: rgb(24, 24, 24);
-    border: 1px solid rgb(34, 34, 34);
+    background-color: rgb(16, 16, 16);
+    border: 1px solid rgb(28, 28, 28);
     box-sizing: border-box;
     display: block;
     margin: 0 auto;
@@ -41,13 +41,12 @@ a:not(.button):active {
 }
 
 .button:hover {
-    background-color: rgb(21, 21, 21);
-    border-color: rgb(31, 31, 31);
+    background-color: rgb(28, 28, 28);
 }
 
 .button:active {
-    background-color: rgb(18, 18, 18);
-    border-color: rgb(28, 28, 28);
+    background-color: rgb(24, 24, 24);
+    border-color: rgb(24, 24, 24);
 }
 
 /**/
@@ -74,7 +73,9 @@ a:not(.button):active {
 }
 
 .page {
-    background-image: url('/img/grid.png');
+    /*background-color: rgb(35, 35, 35);*/
+    background-image: url('http://www.hdwallpapers.in/walls/assassins_creed_unity_game-wide.jpg');
+    background-size: cover;
     height: 720px;
     position: relative;
     width: 1280px;
@@ -104,4 +105,8 @@ a:not(.button):active {
 
 .centered-text {
     text-align: center;
+}
+
+.clear {
+    clear: both;
 }

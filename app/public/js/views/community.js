@@ -1,6 +1,9 @@
 define(['backbone', 'views/user', 'backbone.stickit'], function (BB, UserView) {
     return BB.View.extend({
         el: '#dashboard-community',
+        events: {
+            'click #dashboard-community-showButton': 'showCommunityContent'
+        },
         bindings: {
             '#dashboard-community-user-icon': {
                 observe: 'iconId',
@@ -18,12 +21,16 @@ define(['backbone', 'views/user', 'backbone.stickit'], function (BB, UserView) {
         addUser: function (model, collection, options) {
             var userView = new UserView({model: model});
             this.userViews.push(userView);
-            this.$('#dashboard-community-general').append(userView.$el);
+            this.$('#dashboard-community-userList-general').append(userView.$el);
         },
         removeUser: function (model, collection, options) {
             _.each(this.userViews, function (userView) {
                 if (userView.model.id === model.id) userView.remove();
             });
+        },
+        showCommunityContent: function (event) {
+            this.$('#dashboard-community-showButton').hide();
+            this.$('#dashboard-community-content').show();
         }
     });
 });
