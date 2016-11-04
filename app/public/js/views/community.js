@@ -1,20 +1,11 @@
-define(['backbone', 'views/user', 'backbone.stickit'], function (BB, UserView) {
+define(['backbone', 'views/user'], function (BB, UserView) {
     return BB.View.extend({
         el: '#dashboard-community',
         events: {
             'click #dashboard-community-showButton': 'showCommunityContent'
         },
-        bindings: {
-            '#dashboard-community-user-icon': {
-                observe: 'iconId',
-                update: function ($el, val, model, options) {
-                    $el.attr('src', 'img/icons/' + val + '.png');
-                }
-            }
-        },
         userViews: [],
         initialize: function () {
-            this.stickit(APP.user);
             this.listenTo(APP.users, 'add', this.addUser);
             this.listenTo(APP.users, 'remove', this.removeUser);
         },
