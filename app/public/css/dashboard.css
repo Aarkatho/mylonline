@@ -17,7 +17,6 @@
 }
 
 #dashboard-community-showButton {
-    right: 10px;
 }
 
 #dashboard-community-content {
@@ -25,21 +24,21 @@
     height: 648px;
 }
 
-#dashboard-community-userList-general {
+.dashboard-community-userList {
     padding-top: 5px;
 }
 
 .dashboard-community-userList-user {
     padding: 5px 10px;
-    width: 230px;
+    width: 230px; /**/
 }
 
 .dashboard-community-userList-user:hover {
-    background-color: rgb(12, 12, 12);
+    background-color: rgb(12, 12, 12); /**/
 }
 
 .dashboard-community-userList-user-status {
-    background-color: rgb(65, 65, 65);
+    background-color: rgb(65, 65, 65); /**/
     border-radius: 100%;
     float: left;
     height: 8px;
@@ -50,18 +49,29 @@
 .dashboard-community-userList-user > img {
     border: 1px solid rgb(28, 28, 28);
     display: block;
-    width: 40px;
-    margin-left: 10px;
     float: left;
+    margin-left: 10px;
+    width: 40px;
 }
 
 .dashboard-community-userList-user > span {
     float: left;
     margin: 14px 0 0 10px;
     /* font */
-    color: rgb(150, 150, 150);
+    color: rgb(150, 150, 150); /**/
     font-family: sans-serif;
     font-size: 14px;
+}
+
+#dashboard-community-userList-general {
+}
+
+#dashboard-community-userList-friends {
+    display: none;
+}
+
+#dashboard-community-userList-blocked {
+    display: none;
 }
 
 .dashboard-chatAndCommunity {
@@ -79,7 +89,7 @@
     overflow: hidden;
     width: 40px;
     /* font */
-    color: rgb(150, 150, 150);
+    color: rgb(150, 150, 150); /**/
     text-align: center;
 }
 
