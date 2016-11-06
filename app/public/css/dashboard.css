@@ -87,10 +87,21 @@
 .dashboard-chatAndCommunity-showButton {
     height: 40px;
     overflow: hidden;
+    transition: color 0.3s;
     width: 40px;
     /* font */
     color: rgb(150, 150, 150); /**/
     text-align: center;
+}
+
+.dashboard-chatAndCommunity-showButton:hover {
+    /* font */
+    color: rgb(125, 125, 125);
+}
+
+.dashboard-chatAndCommunity-showButton:active {
+    /* font */
+    color: rgb(100, 100, 100);
 }
 
 .dashboard-chatAndCommunity-showButton > i {

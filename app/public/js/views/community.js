@@ -6,6 +6,7 @@ define(['backbone', 'views/user'], function (BB, UserView) {
         },
         userViews: [],
         initialize: function () {
+            APP.socket.emit('application action', 'join');
             this.listenTo(APP.users, 'add', this.addUser);
             this.listenTo(APP.users, 'remove', this.removeUser);
         },

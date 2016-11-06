@@ -53,7 +53,7 @@ define(['backbone', 'socket.io', 'router'], function (BB, io, router) {
         console.log(data);
 
         switch (action) {
-            case 'update users':
+            case 'update userlist':
                 APP.users.set(data);
                 break;
         }

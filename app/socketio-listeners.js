@@ -3,224 +3,12 @@ var _ = require('underscore');
 
 var User = require('./models/user');
 
+var users = {};
+
 module.exports.initialize = function (io) {
     io.on('connection', function (socket) {
         socket.on('disconnect', function () {
-            if (socket.request.session.user) users.remove(socket.request.session.user.userId);
-        });
-
-        socket.on('root action', function (action, data) {
-            if (socket.request.session.user) {
-                if (socket.request.session.user.isRoot) {
-                    switch (action) {
-                        case 'promote':
-                            var tUserId = data.tUserId.toString();
-
-                            if (validator.isInt(tUserId, {min: 1})) {
-                                User.findOne({userId: tUserId}, function (err, user) {
-                                    if (err) throw err;
-
-                                    if (user) {
-                                        if (user.isRoot) {
-                                            socket.emit('root action', {
-                                                success: false,
-                                                errorMessage: 'El usuario objetivo (' + user.username + ') es root'
-                                            });
-                                        } else if (user.isAdmin) {
-                                            socket.emit('root action', {
-                                                success: false,
-                                                errorMessage: 'El usuario objetivo (' + user.username + ') ya es administrador'
-                                            });
-                                        } else {
-                                            user.isAdmin = true;
-
-                                            user.save(function (err) {
-                                                if (err) throw err;
-
-                                                socket.emit('root action', {
-                                                    success: true,
-                                                    message: 'El usuario objetivo (' + user.username + ') ha sido ascendido a administrador'
-                                                });
-                                            });
-                                        }
-                                    } else {
-                                        socket.emit('root action', {
-                                            success: false,
-                                            errorMessage: 'No se ha encontrado el usuario objetivo'
-                                        });
-                                    }
-                                });
-                            } else {
-                                socket.emit('root action', {
-                                    success: false,
-                                    errorMessage: ''
-                                });
-                            }
-
-                            break;
-                    }
-                } else {
-                    socket.emit('root action', {
-                        success: false,
-                        errorMessage: 'No tienes los permisos para llevar a cabo esta acción'
-                    });
-                }
-            } else {
-                socket.emit('root action', {
-                    success: false,
-                    errorMessage: 'Debes iniciar sesión para llevar a cabo esta acción'
-                });
-            }
-        });
-
-        socket.on('administrator action', function (action, data) {
-            if (socket.request.session.user) {
-                if (socket.request.session.user.isRoot || socket.request.session.user.isAdministrator) {
-                    switch (action) {
-                        case 'ban':
-                            var tUserId = data.tUserId.toString();
-
-                            if (validator.isInt(tUserId, {min: 1})) {
-                                User.findOne({userId: tUserId}, function (err, user) {
-                                    if (err) throw err;
-
-                                    if (user) {
-                                        var promise = new Promise(function (resolve, reject) {
-                                            if (user.isRoot) reject('No puedes banear a un root');
-                                            else if (user.isAdministrator) {
-                                                if (socket.request.session.user.isRoot) {
-                                                    user.isAdministrator = false;
-                                                    resolve();
-                                                } else reject('Un administrador no puede banear a otro administrador');
-                                            } else resolve();
-                                        });
-
-                                        promise.then(function () {
-                                            if (user.isBanned) {
-                                                socket.emit('administrator action', {
-                                                    success: false,
-                                                    errorMessage: 'El usuario objetivo (' + user.username + ') ya está baneado'
-                                                });
-                                            } else {
-                                                user.isBanned = true;
-
-                                                user.save(function (err) {
-                                                    if (err) throw err;
-                                                    if (users.isConnected(user.userId)) users.get(user.userId).socket.disconnect();
-
-                                                    socket.emit('administrator action', {
-                                                        success: true,
-                                                        message: 'El usuario objetivo (' + user.username + ') ha sido baneado'
-                                                    });
-                                                });
-                                            }
-                                        }).catch(function (errorMessage) {
-                                            socket.emit('administrator action', {
-                                                success: false,
-                                                errorMessage: errorMessage
-                                            });
-                                        });
-                                    } else {
-                                        socket.emit('administrator action', {
-                                            success: false,
-                                            errorMessage: 'No se ha encontrado el usuario objetivo'
-                                        });
-                                    }
-                                });
-                            } else {
-                                socket.emit('administrator action', {
-                                    success: false,
-                                    errorMessage: 'El valor del parámetro "ID" es inválido'
-                                });
-                            }
-
-                            break;
-                        case 'unban':
-                            var tUserId = data.tUserId.toString();
-
-                            if (validator.isInt(tUserId, {min: 1})) {
-                                User.findOne({userId: tUserId}, function (err, user) {
-                                    if (err) throw err;
-
-                                    if (user) {
-                                        if (user.isRoot || user.isAdministrator) {
-                                            var is = user.isRoot ? 'root' : 'administrador';
-
-                                            socket.emit('administrator action', {
-                                                success: false,
-                                                errorMessage: 'El usuario objetivo (' + user.username + ') es ' + is + ', no puede estar baneado'
-                                            });
-                                        } else {
-                                            if (user.isBanned) {
-                                                user.isBanned = false;
-
-                                                user.save(function (err) {
-                                                    if (err) throw err;
-
-                                                    socket.emit('administrator action', {
-                                                        success: true,
-                                                        message: 'El usuario objetivo (' + user.username + ') ha sido desbaneado'
-                                                    });
-                                                });
-                                            } else {
-                                                socket.emit('administrator action', {
-                                                    success: false,
-                                                    errorMessage: 'El usuario objetivo (' + user.username + ') no está baneado'
-                                                });
-                                            }
-                                        }
-                                    } else {
-                                        socket.emit('administrator action', {
-                                            success: false,
-                                            errorMessage: 'No se ha encontrado el usuario objetivo'
-                                        });
-                                    }
-                                });
-                            } else {
-                                socket.emit('administrator action', {
-                                    success: false,
-                                    errorMessage: 'El valor del parámetro "ID" es inválido'
-                                });
-                            }
-
-                            break;
-                        case 'kick':
-                            break;
-                        case 'warn':
-                            break;
-                        case 'announce':
-                            break;
-                    }
-                } else {
-                    socket.emit('administrator action', {
-                        success: false,
-                        errorMessage: 'No tienes los permisos para llevar a cabo esta acción'
-                    });
-                }
-            } else {
-                socket.emit('administrator action', {
-                    success: false,
-                    errorMessage: 'Debes iniciar sesión para llevar a cabo esta acción'
-                });
-            }
-        });
-
-        socket.on('user action', function (action, data) {
-            if (socket.request.session.user) {
-                switch (action) {
-                    case 'block':
-                        break;
-                    case 'add friend':
-                        break;
-                    case 'remove friend':
-                        break;
-                }
-            } else {
-                socket.emit('user action', {
-                    success: false,
-                    errorMessage: 'Debes iniciar sesión para llevar a cabo esta acción'
-                });
-            }
+            if (socket.request.session.user) delete users[socket.request.session.user.userId];
         });
 
         socket.on('anonymous action', function (action, data) {
@@ -239,21 +27,18 @@ module.exports.initialize = function (io) {
                                         errorCode: 3
                                     });
                                 } else {
-                                    if (users.isConnected(user.userId)) users.get(user.userId).socket.disconnect();
+                                    if (users[user.userId]) users[user.userId].socket.disconnect();
+
+                                    users[user.userId] = {
+                                        username: user.username,
+                                        iconId: user.iconId
+                                    };
+
                                     socket.request.session.user = user.getSessionAttrs();
 
                                     socket.emit('anonymous action', {
                                         success: true,
                                         attrs: user.getPrivateAttrs()
-                                    });
-
-                                    socket.join('users');
-
-                                    users.add({
-                                        userId: user.userId,
-                                        username: user.username,
-                                        iconId: user.iconId,
-                                        socket: socket
                                     });
                                 }
                             } else {
@@ -330,29 +115,12 @@ module.exports.initialize = function (io) {
             }
         });
 
-        socket.on('application action', function (action, data) {});
+        socket.on('application action', function (action, data) {
+            switch (action) {
+                case 'join':
+                    socket.join('community');
+                    io.to('community').emit('application action', 'update userlist', _.toArray(users));
+            }
+        });
     });
-
-    var users = {
-        list: [],
-        add: function (user) {
-            this.list.push(user);
-            io.to('users').emit('application action', 'update users', this.getAll());
-        },
-        get: function (userId) {
-            return _.findWhere(this.list, {userId: userId});
-        },
-        getAll: function () {
-            return _.map(this.list, function (user) {
-                return _.omit(user, 'socket');
-            });
-        },
-        isConnected: function (userId) {
-            return _.findIndex(this.list, {userId: userId}) !== -1 ? true : false;
-        },
-        remove: function (userId) {
-            this.list.splice(_.findIndex(this.list, {userId: userId}), 1);
-            io.to('users').emit('application action', 'update users', this.getAll());
-        }
-    };
 };
