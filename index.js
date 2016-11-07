@@ -4,7 +4,6 @@ var socketIo = require('socket.io');
 var hoganExpress = require('hogan-express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
-var expressSession = require('express-session');
 var bluebird = require('bluebird');
 
 var router = require('./app/router');
@@ -14,11 +13,6 @@ var User = require('./app/models/user');
 var app = express();
 var server = http.Server(app);
 var io = socketIo(server);
-var sessionMiddleware = expressSession({
-    secret: 'Nothing is true',
-    resave: false,
-    saveUninitialized: false
-});
 
 app.set('views', __dirname + '/app/views');
 app.set('view engine', 'html');
@@ -26,19 +20,14 @@ app.set('view engine', 'html');
 app.use(morgan('dev'));
 app.use(express.static(__dirname + '/app/public'));
 app.use('/', router);
-app.use(sessionMiddleware);
 
 app.engine('html', hoganExpress);
-
-io.use(function (socket, next) {
-    sessionMiddleware(socket.request, socket.request.res, next);
-});
 
 socketIoListeners.initialize(io);
 
 mongoose.Promise = bluebird;
 
-mongoose.connect('mongodb://test:123@jello.modulusmongo.net:27017/o9Warodi', function (err) {
+mongoose.connect('mongodb://test:123@jello.modulusmongo.net:27017/ryw4osUs', function (err) {
     if (err) throw err;
 
     User.findOne({standarizedUsername: 'root'}, function (err, user) {

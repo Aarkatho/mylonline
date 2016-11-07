@@ -29,8 +29,10 @@ var UserSchema = new Schema({
 UserSchema.methods.getSessionAttrs = function () {
     return {
         userId: this.userId,
+        username: this.username,
         isRoot: this.isRoot,
-        isAdministrator: this.isAdministrator
+        isAdministrator: this.isAdministrator,
+        iconId: this.iconId
     };
 };
 

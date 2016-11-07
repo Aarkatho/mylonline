@@ -3,12 +3,14 @@ var _ = require('underscore');
 
 var User = require('./models/user');
 
-var users = {};
-
 module.exports.initialize = function (io) {
     io.on('connection', function (socket) {
         socket.on('disconnect', function () {
-            if (socket.request.session.user) delete users[socket.request.session.user.userId];
+            if (socket.user) {
+                io.emit('application action', 'update userlist', _.map(io.sockets.connected, function (socket) {
+                    return socket.user;
+                }));
+            }
         });
 
         socket.on('anonymous action', function (action, data) {
@@ -27,14 +29,17 @@ module.exports.initialize = function (io) {
                                         errorCode: 3
                                     });
                                 } else {
-                                    if (users[user.userId]) users[user.userId].socket.disconnect();
+                                    _.each(io.sockets.connected, function (socket) {
+                                        if (socket.user) {
+                                            if (socket.user.userId === user.userId) socket.disconnect();
+                                        }
+                                    });
 
-                                    users[user.userId] = {
-                                        username: user.username,
-                                        iconId: user.iconId
-                                    };
+                                    socket.user = user.getSessionAttrs();
 
-                                    socket.request.session.user = user.getSessionAttrs();
+                                    io.emit('application action', 'update userlist', _.map(io.sockets.connected, function (socket) {
+                                        return socket.user;
+                                    }));
 
                                     socket.emit('anonymous action', {
                                         success: true,
@@ -115,12 +120,6 @@ module.exports.initialize = function (io) {
             }
         });
 
-        socket.on('application action', function (action, data) {
-            switch (action) {
-                case 'join':
-                    socket.join('community');
-                    io.to('community').emit('application action', 'update userlist', _.toArray(users));
-            }
-        });
+        socket.on('application action', function (action, data) {});
     });
 };

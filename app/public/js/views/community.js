@@ -1,4 +1,4 @@
-define(['backbone', 'views/user'], function (BB, UserView) {
+define(['backbone', 'collections/users', 'views/user'], function (BB, UsersCollection, UserView) {
     return BB.View.extend({
         el: '#dashboard-community',
         events: {
@@ -6,9 +6,10 @@ define(['backbone', 'views/user'], function (BB, UserView) {
         },
         userViews: [],
         initialize: function () {
-            APP.socket.emit('application action', 'join');
+            APP.users = new UsersCollection();
             this.listenTo(APP.users, 'add', this.addUser);
             this.listenTo(APP.users, 'remove', this.removeUser);
+            APP.users.add(APP.user);
         },
         addUser: function (model, collection, options) {
             var userView = new UserView({model: model});
